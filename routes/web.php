@@ -1,8 +1,9 @@
 <?php
 
-Route::redirect('/', '/login');
+// Route::redirect('/', '/login');
+Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
+Route::get('/home', 'HomeController@index')->name('home');
 
-Route::redirect('/home', '/admin');
 
 Auth::routes(['register' => false]);
 
@@ -21,7 +22,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('users', 'UsersController');
 
-    Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
+    Route::delete('productsCategory/destroy', 'ProductsController@massDestroy')->name('productsCategory.massDestroy');
+
+    Route::resource('productsCategory', 'ProductCategoryController');
+
+    Route::delete('productSubCategory/destroy', 'ProductSubCategoryController@massDestroy')->name('productsSubCategory.massDestroy');
+
+    Route::resource('productsSubCategory', 'ProductSubCategoryController');
+
+    Route::delete('products/destroy', 'ProductCategoryController@massDestroy')->name('products.massDestroy');
 
     Route::resource('products', 'ProductsController');
 });
+Route::redirect('/home', 'admin/');

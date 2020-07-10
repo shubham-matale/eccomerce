@@ -84,6 +84,30 @@
                         </a>
                     </li>
                 @endcan
+                @can('product_category_access')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.productsCategory.index") }}" class="nav-link {{ request()->is('admin/productsCategory') || request()->is('admin/productsCategory/*') ? 'active' : '' }}">
+                            <i class="fas fa-cogs">
+
+                            </i>
+                            <p>
+                                <span>Product Category</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                @can('product_subcategory_access')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.productsSubCategory.index") }}" class="nav-link {{ request()->is('admin/productsSubCategory') || request()->is('admin/productsSubCategory/*') ? 'active' : '' }}">
+                            <i class="fas fa-cogs">
+
+                            </i>
+                            <p>
+                                <span>Product Sub Category</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
                 <li class="nav-item">
                     <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                         <p>
