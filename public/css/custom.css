@@ -49,3 +49,7 @@ table.dataTable thead .sorting_desc {
     line-height: 1.5;
     border-radius: 3px;
 }
+
+.has-error{
+    color: red;
+}

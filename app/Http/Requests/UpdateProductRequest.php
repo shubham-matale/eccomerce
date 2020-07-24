@@ -18,6 +18,15 @@ class UpdateProductRequest extends FormRequest
             'name' => [
                 'required',
             ],
+            'product_subcategory_id'=>[
+                'required'
+            ],
+            'product_image_url'=> [
+
+            'mimes:jpeg,bmp,png,jpg',
+            'file',
+            'max:1024'
+            ],
         ];
     }
 }

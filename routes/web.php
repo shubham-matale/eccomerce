@@ -30,8 +30,31 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('productsSubCategory', 'ProductSubCategoryController');
 
-    Route::delete('products/destroy', 'ProductCategoryController@massDestroy')->name('products.massDestroy');
+    //products Variable
+
+    Route::post('products/addVariable', 'ProductsController@variableCreate')->name('products.addVariable');
+
+    Route::get('products/editVariable/{id}/edit','ProductsController@variableEdit')->name('products.editVariable');
+
+    Route::put('products/updateVariable/{productVariable}','ProductsController@variableUpdate')->name('products.updateVariable');
+
+    Route::delete('products/variableDestroy/{id}', 'ProductsController@variableDestroy')->name('products.variableDestroy');
+
+    //product Image
+    Route::post('products/addImage', 'ProductsController@imageCreate')->name('products.addImage');
+
+    Route::delete('products/ImageDestroy/{id}', 'ProductsController@imageDestroy')->name('products.imageDestroy');
+
+    //product
+    Route::delete('products/destroy', 'ProductsController@massDestroy')->name('products.massDestroy');
 
     Route::resource('products', 'ProductsController');
+
+    //Coupons
+
+    Route::delete('coupons/destroy', 'CouponCodeController@massDestroy')->name('coupons.massDestroy');
+
+    Route::resource('coupons', 'CouponCodeController');
+
 });
 Route::redirect('/home', 'admin/');

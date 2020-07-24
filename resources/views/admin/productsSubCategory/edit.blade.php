@@ -39,11 +39,10 @@
             </div>
             <div class="form-group">
                 <label>Parent Category</label>
-                <select class="form-control" name="product_category_id" id="product_category_id" value="{{ old('is_active', isset($productSubCategory) ? $productSubCategory->product_category_id : 1) }}">
+                <select class="form-control" name="product_category_id" id="product_category_id" value="{{ old('product_category_id', isset($productSubCategory) ? $productSubCategory->product_category_id : 1) }}">
                     @foreach($productCategory as $key=> $parentCategory )
-                        <option {{isset($productSubCategory) && $productSubCategory->product_category_id==0?'selected':''}}  value="{{$parentCategory->id}}">{{$parentCategory->product_category_name}} </option>
+                        <option {{isset($productSubCategory) && $productSubCategory->product_category_id==$parentCategory->id?'selected':''}}  value="{{$parentCategory->id}}">{{$parentCategory->product_category_name}} </option>
                     @endforeach
-
                 </select>
             </div>
             <div class="form-group">

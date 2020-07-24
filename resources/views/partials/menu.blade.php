@@ -13,10 +13,11 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="{{ route("admin.home") }}" class="nav-link">
-                        <p>
-                            <i class="fas fa-tachometer-alt">
+
+                            <i class="fa fa-dashboard">
 
                             </i>
+                        <p>
                             <span>{{ trans('global.dashboard') }}</span>
                         </p>
                     </a>
@@ -24,7 +25,7 @@
                 @can('user_management_access')
                     <li class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
                         <a class="nav-link nav-dropdown-toggle">
-                            <i class="fas fa-users">
+                            <i class="fa fa-users">
 
                             </i>
                             <p>
@@ -36,7 +37,7 @@
                             @can('permission_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
-                                        <i class="fas fa-unlock-alt">
+                                        <i class="fa fa-unlock-alt">
 
                                         </i>
                                         <p>
@@ -48,7 +49,7 @@
                             @can('role_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
-                                        <i class="fas fa-briefcase">
+                                        <i class="fa fa-briefcase">
 
                                         </i>
                                         <p>
@@ -60,7 +61,7 @@
                             @can('user_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
-                                        <i class="fas fa-user">
+                                        <i class="fa fa-user">
 
                                         </i>
                                         <p>
@@ -75,7 +76,7 @@
                 @can('product_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.products.index") }}" class="nav-link {{ request()->is('admin/products') || request()->is('admin/products/*') ? 'active' : '' }}">
-                            <i class="fas fa-cogs">
+                            <i class="fa fa-anchor">
 
                             </i>
                             <p>
@@ -87,7 +88,7 @@
                 @can('product_category_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.productsCategory.index") }}" class="nav-link {{ request()->is('admin/productsCategory') || request()->is('admin/productsCategory/*') ? 'active' : '' }}">
-                            <i class="fas fa-cogs">
+                            <i class="fa fa-eercast">
 
                             </i>
                             <p>
@@ -99,7 +100,7 @@
                 @can('product_subcategory_access')
                     <li class="nav-item">
                         <a href="{{ route("admin.productsSubCategory.index") }}" class="nav-link {{ request()->is('admin/productsSubCategory') || request()->is('admin/productsSubCategory/*') ? 'active' : '' }}">
-                            <i class="fas fa-cogs">
+                            <i class="fa fa-eercast">
 
                             </i>
                             <p>
@@ -108,12 +109,25 @@
                         </a>
                     </li>
                 @endcan
-                <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                        <p>
-                            <i class="fas fa-sign-out-alt">
+                @can('access_coupon')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.coupons.index") }}" class="nav-link {{ request()->is('admin/coupons') || request()->is('admin/coupons/*') ? 'active' : '' }}">
+                            <i class="fa fa-eercast">
 
                             </i>
+                            <p>
+                                <span>Discount Coupons</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+
+                            <i class="fa fa-sign-out">
+
+                            </i>
+                        <p>
                             <span>{{ trans('global.logout') }}</span>
                         </p>
                     </a>

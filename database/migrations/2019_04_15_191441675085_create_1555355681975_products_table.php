@@ -9,7 +9,7 @@ class Create1555355681975ProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->longText('description')->nullable();
             $table->decimal('price', 15, 2)->nullable();

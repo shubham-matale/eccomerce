@@ -54,13 +54,13 @@
                             <td>
                                 @can('product_category_access')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.productsCategory.show', $product->id) }}">
-                                        <i class="fas fa-folder">
+                                        <i class="fa fa-folder">
                                         </i>{{ trans('global.view') }}
                                     </a>
                                 @endcan
                                 @can('update_product_category')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.productsCategory.edit', $product->id) }}">
-                                        <i class="fas fa-pencil-alt">
+                                        <i class="fa fa-pencil-alt">
                                         </i>{{ trans('global.edit') }}
                                     </a>
                                 @endcan

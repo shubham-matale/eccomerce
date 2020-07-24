@@ -11,8 +11,6 @@ class ProductCategoryController extends Controller
 {
     public function index()
     {
-
-
         $productCategory = ProductCategory::all();
 
         return view('admin.productsCategory.index', compact('productCategory'));
@@ -89,7 +87,7 @@ class ProductCategoryController extends Controller
         $image_name = time().'.'.$image->getClientOriginalExtension();
         $destinationPath = public_path('images/productCategories');
         $image->move($destinationPath, $image_name);
-        $imageURL=env('APP_URL').'/public/images/productCategories/'.$image_name;
+        $imageURL=env('APP_URL').'/images/productCategories/'.$image_name;
         return $imageURL;
     }
 }

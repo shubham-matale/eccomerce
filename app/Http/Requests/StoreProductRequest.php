@@ -18,6 +18,15 @@ class StoreProductRequest extends FormRequest
             'name' => [
                 'required',
             ],
+            'product_subcategory_id'=>[
+                'required'
+            ],
+            'product_image_url'=> [
+                'required',
+                'mimes:jpeg,bmp,png,jpg',
+                'file',
+                'max:1024'
+            ],
         ];
     }
 }

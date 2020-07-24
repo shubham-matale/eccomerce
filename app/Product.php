@@ -17,10 +17,21 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'price',
+        'product_image_url',
+        'product_subcategory_id',
         'created_at',
         'updated_at',
         'deleted_at',
         'description',
     ];
+
+    public function productVariable()
+    {
+        return $this->hasMany(ProductVariable::class);
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
 }

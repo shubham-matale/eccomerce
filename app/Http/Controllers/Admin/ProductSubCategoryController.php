@@ -93,7 +93,7 @@ class ProductSubCategoryController extends Controller
         $image_name = time().'.'.$image->getClientOriginalExtension();
         $destinationPath = public_path('images/productSubCategories');
         $image->move($destinationPath, $image_name);
-        $imageURL=env('APP_URL').'/public/images/productSubCategories/'.$image_name;
+        $imageURL=env('APP_URL').'/images/productSubCategories/'.$image_name;
         return $imageURL;
     }
 }
