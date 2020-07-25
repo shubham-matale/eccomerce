@@ -27,4 +27,9 @@ class CouponCode extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function order()
+    {
+        return $this->hasMany(Order::class,'coupon_code_id','id');
+    }
 }

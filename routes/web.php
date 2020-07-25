@@ -50,6 +50,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('products', 'ProductsController');
 
+    //Orders
+
+    Route::resource('orders', 'OrderController');
+
     //Coupons
 
     Route::delete('coupons/destroy', 'CouponCodeController@massDestroy')->name('coupons.massDestroy');
