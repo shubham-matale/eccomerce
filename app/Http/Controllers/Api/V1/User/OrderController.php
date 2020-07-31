@@ -19,7 +19,7 @@ use Razorpay\Api\Api;
 class OrderController extends Controller{
 
     public $tax=5;
-    public $rate_per_km=1.6;
+    public $rate_per_km=0.6;
 
     public function getRate(Request $request)
     {
@@ -44,9 +44,9 @@ class OrderController extends Controller{
                     'total'=>0];
                 $allProductsInCart = $request->get('products');
                 foreach($allProductsInCart as $key=>$eachProduct){
-                    $product=ProductVariable::with('product')->where('id','=',$eachProduct['product_variable_id'])->first();
+                    $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
-                        $response['sub_total']=$response['sub_total']+($eachProduct['quantity']*$product->variable_selling_price);
+                        $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
                     }
 
 
@@ -66,8 +66,10 @@ class OrderController extends Controller{
                             if($response['sub_total']>=$couponCode->minimum_value){
                                 if($couponCode->type=='flat'){
                                     $response['sub_total']-=$couponCode->value;
-                                }elseif ($couponCode->type=='percentage'){
+                                    $response['discount']=$couponCode->value;
+                                }else if($couponCode->type=='percentage'){
                                     $response['sub_total']=$response['sub_total']-($response['sub_total']*($couponCode->value/100));
+                                    $response['discount']= ($response['sub_total']*($couponCode->value/100));
                                 }
                             }
                         }
@@ -112,9 +114,9 @@ class OrderController extends Controller{
                     'total'=>0];
                 $allProductsInCart = $request->get('products');
                 foreach($allProductsInCart as $key=>$eachProduct){
-                    $product=ProductVariable::with('product')->where('id','=',$eachProduct['product_variable_id'])->first();
+                    $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
-                        $response['sub_total']=$response['sub_total']+($eachProduct['quantity']*$product->variable_selling_price);
+                        $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
                     }
 
 
