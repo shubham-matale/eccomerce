@@ -109,6 +109,30 @@
                         </a>
                     </li>
                 @endcan
+                @can('view_order')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.orders.index") }}" class="nav-link {{ request()->is('admin/orders') || request()->is('admin/orders/*') ? 'active' : '' }}">
+                            <i class="fa fa-eercast">
+
+                            </i>
+                            <p>
+                                <span>All Orders</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                @can('view_tickets')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.tickets.index") }}" class="nav-link {{ request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'active' : '' }}">
+                            <i class="fa fa-eercast">
+
+                            </i>
+                            <p>
+                                <span>Support Tickets</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
                 @can('access_coupon')
                     <li class="nav-item">
                         <a href="{{ route("admin.coupons.index") }}" class="nav-link {{ request()->is('admin/coupons') || request()->is('admin/coupons/*') ? 'active' : '' }}">

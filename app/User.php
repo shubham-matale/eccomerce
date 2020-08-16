@@ -9,8 +9,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use DB;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use SoftDeletes, Notifiable;
 
@@ -36,6 +38,16 @@ class User extends Authenticatable
         'remember_token',
         'email_verified_at',
     ];
+
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     public function getEmailVerifiedAtAttribute($value)
     {
@@ -63,4 +75,31 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function deliveryBoyId(){
+        return $this->hasMany(Order::class,'delivery_boy_id ','id');
+    }
+
+    public function checkPermission($permission){
+        $allRoles = $this->roles()->get();
+        foreach($allRoles as $key=>$role){
+            $data = $role->permissions()->where('title','=',$permission)->first();
+            if($data!=null){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
+    public function messageAdmin(){
+        return $this->hasMany(TicketMessage::class,'	admin_id','id');
+    }
+
+
+    public function ticketAssigned(){
+        return $this->hasMany(Ticket::class,'assigned_to','id');
+    }
+
 }

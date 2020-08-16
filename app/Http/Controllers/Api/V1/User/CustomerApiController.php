@@ -130,6 +130,7 @@ class CustomerApiController extends Controller{
                     $address->pincode=$request->pincode;
                     $address->latitude=$request->latitude;
                     $address->longitude=$request->longitude;
+                    $address->customer_id=$customer->id;
                     $addressSaveStatus = $address->save();
                     if (!$addressSaveStatus) {
                         return response()->json(['success' => false,

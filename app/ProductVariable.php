@@ -32,4 +32,9 @@ class ProductVariable extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(ProductVariable::class,'product_variable_id','id');
+    }
 }

@@ -20,11 +20,12 @@ class CreateAddressesTable extends Migration
             $table->string('address_line_1');
             $table->string('address_line_2');
             $table->string('pincode');
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
+            $table->string('latitude' );
+            $table->string('longitude');
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });
+
     }
 
     /**

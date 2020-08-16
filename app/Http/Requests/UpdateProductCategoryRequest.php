@@ -29,7 +29,10 @@ class UpdateProductCategoryRequest extends FormRequest
                 'required',
             ],
             'product_category_image_url'=> [
-                'nullable|mimes:jpeg,bmp,png,jpg|file|max:1024',
+                'nullable',
+                'mimes:jpeg,bmp,png,jpg',
+                'file',
+                'max:1024'
             ],
         ];
     }

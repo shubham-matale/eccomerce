@@ -5,11 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Address extends Model
+class TicketStatus extends Model
 {
     use SoftDeletes;
 
-    public function orders(){
-        return $this->hasMany(Orders::class,'address_id','id');
+    public function tickets(){
+        return $this->hasMany(Ticket::class,'ticket_status_id','id');
     }
 }

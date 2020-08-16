@@ -13,4 +13,14 @@ class OrderDetails extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function productVariable()
+    {
+        return $this->belongsTo(ProductVariable::class,'product_variable_id','id');
+    }
+
+    public function product(){
+        return $this->hasManyThrough(Product::class,ProductVariable::class,'product_variable_id','product_id','id','id' );
+    }
+
 }

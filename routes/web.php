@@ -54,11 +54,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('orders', 'OrderController');
 
+    Route::post('orders/assignDeliveryBoy/{id}', 'OrderController@assignDeliveryBoy')->name('orders.assignDeliveryBoy');
+
     //Coupons
 
     Route::delete('coupons/destroy', 'CouponCodeController@massDestroy')->name('coupons.massDestroy');
 
     Route::resource('coupons', 'CouponCodeController');
+
+    //Tickets
+
+    Route::get('tickets','TicketsController@index')->name('tickets.index');
+
+    Route::get('tickets/assignToMe/{id}','TicketsController@assignToMe')->name('tickets.assign');
+
+    Route::get('tickets/closeTicket/{id}','TicketsController@close')->name('tickets.close');
+
+    Route::get('tickets/openTicket/{id}','TicketsController@open')->name('tickets.open');
+
+    Route::post('tickets/addMessage','TicketsController@addMessage')->name('tickets.addMessage');
+
+    Route::get('tickets/getMessage/{id}','TicketsController@getMessage')->name('tickets.getMessage');
 
 });
 Route::redirect('/home', 'admin/');

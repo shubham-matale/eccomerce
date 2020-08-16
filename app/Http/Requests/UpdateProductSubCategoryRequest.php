@@ -30,7 +30,10 @@ class UpdateProductSubCategoryRequest extends FormRequest
                 'required',
             ],
             'product_subcategory_image_url'=> [
-                'nullable|mimes:jpeg,bmp,png,jpg|file|max:1024',
+                'nullable',
+                'mimes:jpeg,bmp,png,jpg',
+                'file',
+                'max:1024'
             ],
         ];
     }

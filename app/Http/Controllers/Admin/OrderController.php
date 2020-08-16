@@ -6,96 +6,72 @@ use App\CouponCode;
 use App\Http\Controllers\Controller;
 
 use App\Order;
+Use App\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         abort_unless(\Gate::allows('view_order'), 403);
-        $orders = Order::with('couponDetails')->get();
-        dd($orders);
-        return view('admin.coupons.index', compact('coupons'));
+        $orders = Order::with(['couponDetails','customer','deliveryBoy'])->orderBy('id','DESC')->get();
+
+        return view('admin.orders.index', compact('orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        abort_unless(\Gate::allows('create_coupon'), 403);
-        $couponCode = new CouponCode;
-        return view('admin.coupons.create', compact('couponCode'));
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        abort_unless(\Gate::allows('create_coupon'), 403);
-        $couponCode = new CouponCode;
-        $couponCode->create($request->all());
-        return redirect()->route('admin.coupons.index');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\CouponCode  $couponCode
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CouponCode $couponCode)
+
+    public function show($id)
     {
-        //
+        abort_unless(\Gate::allows('view_order'), 403);
+        $delivery_boy_list = User::whereHas('roles',function ($role){
+            $role->where('title','=','delivery_boy');
+        })->get();
+        $order = Order::where('id',$id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy'])->first();
+
+        return view('admin.orders.show', compact(['order','delivery_boy_list']));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CouponCode  $couponCode
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id,CouponCode $couponCode)
+    public function assignDeliveryBoy(Request $request, $id){
+        abort_unless(\Gate::allows('assign_delivery_boy'), 403);
+        $delivery_boy_list = User::whereHas('roles',function ($role){
+            $role->where('title','=','delivery_boy');
+        })->get();
+        $order = Order::where('id',$id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy'])->first();
+        $order->delivery_boy_id=$request->delivery_boy_id;
+        $order->order_status_id=3;
+        $order->save();
+        return view('admin.orders.show', compact(['order','delivery_boy_list']));
+
+    }
+
+
+    public function edit($id)
     {
-        abort_unless(\Gate::allows('update_product_category'), 403);
-        $couponCode = CouponCode::find($id);
-        return view('admin.coupons.edit', compact('couponCode'));
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CouponCode  $couponCode
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
-        abort_unless(\Gate::allows('update_coupon'), 403);
-        $couponCode = CouponCode::find($id);
-        $couponCode->update($request->all());
-        return redirect()->route('admin.coupons.index');
+
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\CouponCode  $couponCode
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CouponCode $couponCode)
+
+    public function destroy($id)
     {
         //
     }

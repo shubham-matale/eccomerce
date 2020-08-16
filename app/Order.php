@@ -9,7 +9,7 @@ class Order extends Model
 {
     use SoftDeletes;
 
-    public function orderDetail()
+    public function orderDetails()
     {
         return $this->hasMany(OrderDetails::class);
     }
@@ -21,6 +21,22 @@ class Order extends Model
 
     public function orderStatus()
     {
-        return $this->hasOne(OrderStatus::class);
+        return $this->belongsTo(OrderStatus::class);
+    }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class,'customer_id','id');
+    }
+
+    public function deliveryBoy(){
+        return $this->belongsTo(User::class,'delivery_boy_id','id');
+    }
+
+    public function address(){
+        return $this->belongsTo(Address::class,'address_id','id');
+    }
+
+    public function allProductDetail(){
+        return $this->hasManyThrough(ProductVariable::class,Order::class,'product_variable_id','order_id','id' );
     }
 }
