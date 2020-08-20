@@ -40,6 +40,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::delete('products/variableDestroy/{id}', 'ProductsController@variableDestroy')->name('products.variableDestroy');
 
+    //yadi/customized products
+
+    Route::resource('yadiProducts', 'CustomizedProductController');
+
+    Route::post('yadiProducts/addVariable', 'CustomizedProductController@variableCreate')->name('yadiProducts.addVariable');
+
+    Route::get('yadiProducts/editVariable/{id}/edit','CustomizedProductController@variableEdit')->name('yadiProducts.editVariable');
+
+    Route::put('yadiProducts/updateVariable/{productVariable}','CustomizedProductController@variableUpdate')->name('yadiProducts.updateVariable');
+
+    Route::delete('yadiProducts/variableDestroy/{id}', 'CustomizedProductController@variableDestroy')->name('yadiProducts.variableDestroy');
+
+    Route::post('yadiProducts/addImage', 'CustomizedProductController@imageCreate')->name('yadiProducts.addImage');
+
+    Route::delete('yadiProducts/ImageDestroy/{id}', 'CustomizedProductController@imageDestroy')->name('yadiProducts.imageDestroy');
+
+    Route::get('yadiProducts/addFormula/{id}/addFormula','CustomizedProductController@showFormula')->name('yadiProducts.addFormula');
+
+    Route::post('yadiProducts/saveFormula', 'CustomizedProductController@saveFormula')->name('yadiProducts.saveFormula');
+
+    Route::delete('yadiProducts/deleteIngradientFromFormula/{id}', 'CustomizedProductController@deleteIngradientFromFormula')->name('yadiProducts.deleteIngradientFromFormula');
     //product Image
     Route::post('products/addImage', 'ProductsController@imageCreate')->name('products.addImage');
 

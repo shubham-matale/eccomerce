@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CustomProductVariable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreYadiProductRequest;
+use App\MasalaIngradients;
 use Illuminate\Http\Request;
 use App\Http\Requests\MassDestroyProductRequest;
 use App\Http\Requests\StoreProductRequest;
@@ -13,16 +16,16 @@ use App\ProductVariableOption;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\ProductImage;
 use App\ProductVariable;
+use Validator;
 
 
-class ProductsController extends Controller
-{
+class CustomizedProductController extends Controller{
     public function index()
     {
         abort_unless(\Gate::allows('product_access'), 403);
 
-        $products = Product::where('isCustomProduct',0)->get();
-        return view('admin.products.index', compact('products'));
+        $products = Product::where('isCustomProduct',1)->get();
+        return view('admin.yadiProducts.index', compact('products'));
     }
 
     public function create()
@@ -30,32 +33,27 @@ class ProductsController extends Controller
         abort_unless(\Gate::allows('product_create'), 403);
 
         $productSubCategory=ProductSubCategory::all();
-        return view('admin.products.create',compact('productSubCategory'));
+        return view('admin.yadiProducts.create',compact('productSubCategory'));
     }
 
-    public function store(StoreProductRequest $request)
+    public function store(StoreYadiProductRequest $request)
     {
         abort_unless(\Gate::allows('product_create'), 403);
         $product = new Product;
-        if($request->has('product_image_url')){
-            $product->product_image_url=$this->saveImage($request->product_image_url);
-        }else{
-            $product->product_image_url='';
-        }
-
+        $product->product_image_url='';
+        $product->isCustomProduct=true;
         $product->name=$request->name;
         $product->description=$request->description;
-        $product->product_subcategory_id=$request->product_subcategory_id;
         $product->save();
 
-        return redirect()->route('admin.products.index');
+        return redirect()->route('admin.yadiProducts.index');
     }
 
     public function edit(Product $product)
     {
         abort_unless(\Gate::allows('product_edit'), 403);
         $productSubCategory=ProductSubCategory::all();
-        return view('admin.products.edit', compact(['product','productSubCategory']));
+        return view('admin.yadiProducts.edit', compact(['product','productSubCategory']));
     }
 
     public function update(UpdateProductRequest $request, Product $product)
@@ -72,16 +70,18 @@ class ProductsController extends Controller
         $product->save();
 
 
-        return redirect()->route('admin.products.index');
+        return redirect()->route('admin.yadiProducts.index');
     }
 
-    public function show(Product $product)
+    public function show($id)
     {
+
         abort_unless(\Gate::allows('product_show'), 403);
+        $product = Product::find($id);
         $productVariableOptions = ProductVariableOption::all();
-        $productVariables=ProductVariable::where('product_id','=',$product->id)->get();
-        $productImages=ProductImage::where('product_id','=',$product->id)->get();
-        return view('admin.products.show', compact(['product','productVariableOptions','productVariables','productImages']));
+        $productVariables=ProductVariable::where('product_id','=',$id)->get();
+        $productImages=ProductImage::where('product_id','=',$id)->get();
+        return view('admin.yadiProducts.show', compact(['product','productVariableOptions','productVariables','productImages']));
     }
 
     public function destroy(Product $product)
@@ -125,7 +125,7 @@ class ProductsController extends Controller
 
         $productVariables=ProductVariable::where('product_id','=',$product->id)->get();
 
-        return redirect()->route('admin.products.show',compact('product'));
+        return redirect()->route('admin.yadiProducts.show',$product->id);
 
     }
 
@@ -134,14 +134,14 @@ class ProductsController extends Controller
         $productSubCategory=ProductSubCategory::all();
         $productVariableOptions = ProductVariableOption::all();
         $productVariable=ProductVariable::find($id);
-        return view('admin.products.variableEdit', compact(['productVariableOptions','productVariable']));
+        return view('admin.yadiProducts.variableEdit', compact(['productVariableOptions','productVariable']));
     }
 
     public function variableUpdate(Request $request,ProductVariable $productVariable){
         abort_unless(\Gate::allows('product_edit'), 403);
         $productVariable->update($request->all());
         $product=Product::find($request->product_id);
-        return redirect()->route('admin.products.show',compact('product'));
+        return redirect()->route('admin.yadiProducts.show',$request->product_id);
 
     }
 
@@ -152,7 +152,7 @@ class ProductsController extends Controller
         $productVariable=ProductVariable::find($id);
         $productVariable->delete();
         $product=Product::find($request->product_id);
-        return redirect()->route('admin.products.show',compact('product'));
+        return redirect()->route('admin.yadiProducts.show',$request->product_id);
 
     }
 
@@ -176,27 +176,83 @@ class ProductsController extends Controller
             }
         }
         $product=Product::find($request->product_id);
-        return redirect()->route('admin.products.show',compact('product'));
+        return redirect()->route('admin.yadiProducts.show',$request->product_id);
 
     }
 
     function saveImage($image){
-            $image_name = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('images/products/');
-            $image->move($destinationPath, $image_name);
-            $imageURL=env('APP_URL').'/images/products/'.$image_name;
-            return $imageURL;
+        $image_name = time().'.'.$image->getClientOriginalExtension();
+        $destinationPath = public_path('images/products/');
+        $image->move($destinationPath, $image_name);
+        $imageURL=env('APP_URL').'/images/products/'.$image_name;
+        return $imageURL;
     }
 
     public function imageDestroy(Request $request,$id){
-
         abort_unless(\Gate::allows('product_delete'), 403);
 
         $productImage=ProductImage::find($id);
         $productImage->delete();
         $product=Product::find($request->product_id);
-        return redirect()->route('admin.products.show',compact('product'));
-
+        return redirect()->route('admin.yadiProducts.show',$request->product_id);
     }
 
+    public function showFormula($id){
+        abort_unless(\Gate::allows('product_edit'), 403);
+
+        $ingradients=MasalaIngradients::all();
+        $productVariable=ProductVariable::with('customVariables','customVariables.ingradient')->first();
+        $customIngradients=CustomProductVariable::with('ingradient')->where('product_variable_id',$id)->get();
+        return view('admin.yadiProducts.addFormula', compact(['ingradients','productVariable','customIngradients']));
+    }
+
+    public function saveFormula(Request $request){
+        abort_unless(\Gate::allows('product_edit'), 403);
+
+        $rules = [];
+
+        foreach($request->input('ingradient_id') as $key => $value) {
+            $rules["ingradient_id.{$key}"] = 'required';
+            $rules["default_value.{$key}"] = 'required';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+
+            $ingradientId=[];
+            $default_values=[];
+            foreach($request->input('ingradient_id') as $key => $value) {
+                $ingradientId[$key]=$value;
+            }
+            foreach($request->input('default_value') as $key => $value) {
+                $default_values[$key]=$value;
+            }
+            for($i=0;$i<count($ingradientId);$i++) {
+                $customVariableIngradient=new CustomProductVariable;
+                $customVariableIngradient->product_variable_id=$request->productVaribaleId;
+
+                $customVariableIngradient->ingradient_id=$ingradientId[$i];
+                $customVariableIngradient->default_value=$default_values[$i];
+                $customVariableIngradient->save();
+            }
+
+
+            return response()->json(['success'=>'done']);
+        }
+
+
+        return response()->json(['error'=>$validator->errors()->all()]);
+    }
+
+    public function deleteIngradientFromFormula(Request $request,$id){
+        abort_unless(\Gate::allows('product_delete'), 403);
+
+        $customVariableIngradient=CustomProductVariable::find($id);
+        $productVaribaleId=$customVariableIngradient->product_variable_id;
+        $customVariableIngradient->delete();
+        return redirect()->route('admin.yadiProducts.addFormula',$productVaribaleId);
+    }
 }
+
+?>

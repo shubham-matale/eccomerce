@@ -25,6 +25,8 @@ Route::group(['prefix' => 'v1', 'as' => 'users.', 'namespace' => 'Api\V1\User'],
     Route::apiResource('products', 'ProductsApiController');
 
     //customer
+    Route::get('customer/getCustomProducts','ProductsApiController@getCustomProducts')->name('customer.getCustomProducts');
+
     Route::get('customer/isNewUser','CustomerApiController@isNewUser')->name('customer.isNewUser');
 
     Route::post('customer/createNewUser','CustomerApiController@createNewUser')->name('customer.createNewUser');

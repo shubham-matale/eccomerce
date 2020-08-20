@@ -23,4 +23,8 @@ class OrderDetails extends Model
         return $this->hasManyThrough(Product::class,ProductVariable::class,'product_variable_id','product_id','id','id' );
     }
 
+    public function customProductDetails(){
+        return $this->hasMany(CustomOrderDetails::class,'order_details_id','id');
+    }
+
 }

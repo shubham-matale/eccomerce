@@ -34,5 +34,29 @@ class ProductsApiController extends Controller
 
     }
 
+    public function getCustomProducts(Request $request)
+    {
+        try{
+            $validator = Validator::make($request->all(), [
+
+            ]);
+            if($validator->fails()){
+                return response()->json(['success' => false,
+                    'msg'=>$validator->errors()], 200);
+            }
+            else{
+                $products = Product::where('isCustomProduct',true)->with(['productVariable','productImages','productVariable.customVariables','productVariable.customVariables.ingradient'])->get();
+                return response()->json(['success' => true,
+                    'data'=>$products], 200);
+            }
+        }catch (Exception $e) {
+            return response()->json(['success' => false,
+                'data'=>$e], 200);
+        }
+
+
+    }
+
+
 
 }

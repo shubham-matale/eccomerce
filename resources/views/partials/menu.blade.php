@@ -75,6 +75,18 @@
                 @endcan
                 @can('product_access')
                     <li class="nav-item">
+                        <a href="{{ route("admin.yadiProducts.index") }}" class="nav-link {{ request()->is('admin/yadiProducts') || request()->is('admin/yadiProducts/*') ? 'active' : '' }}">
+                            <i class="fa fa-anchor">
+
+                            </i>
+                            <p>
+                                <span>Customized(Yadi) Products</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+                @can('product_access')
+                    <li class="nav-item">
                         <a href="{{ route("admin.products.index") }}" class="nav-link {{ request()->is('admin/products') || request()->is('admin/products/*') ? 'active' : '' }}">
                             <i class="fa fa-anchor">
 

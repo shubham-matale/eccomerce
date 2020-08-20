@@ -37,4 +37,9 @@ class ProductVariable extends Model
     {
         return $this->hasMany(ProductVariable::class,'product_variable_id','id');
     }
+
+    public function customVariables()
+    {
+        return $this->hasMany(CustomProductVariable::class,'product_variable_id','id');
+    }
 }
