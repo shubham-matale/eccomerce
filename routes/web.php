@@ -71,6 +71,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('products', 'ProductsController');
 
+
+    //banner
+    Route::resource('banners', 'BannersController');
+
     //Orders
 
     Route::resource('orders', 'OrderController');
@@ -99,3 +103,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 });
 Route::redirect('/home', 'admin/');
+
+Route::any ( 'sendemail', function () {
+
+        $data [] = '';
+    Mail::send ( 'email', $data, function ($message) {
+
+//        $message->from ( 'donotreply@demo.com', 'Just Laravel' );
+
+        $message->to ( "mataleshubham@gmail.com"  )->subject ( 'Just Laravel demo email using SendGrid' );
+    } );
+//    return Redirect::back ()->withErrors ( [
+//        'Your email has been sent successfully'
+//    ] );
+} );

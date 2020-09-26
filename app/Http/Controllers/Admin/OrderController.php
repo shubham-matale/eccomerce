@@ -39,7 +39,7 @@ class OrderController extends Controller
         $delivery_boy_list = User::whereHas('roles',function ($role){
             $role->where('title','=','delivery_boy');
         })->get();
-        $order = Order::where('id',$id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy'])->first();
+        $order = Order::where('id',$id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->first();
 
         return view('admin.orders.show', compact(['order','delivery_boy_list']));
     }

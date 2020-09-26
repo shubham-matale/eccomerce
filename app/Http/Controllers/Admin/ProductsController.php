@@ -139,7 +139,12 @@ class ProductsController extends Controller
 
     public function variableUpdate(Request $request,ProductVariable $productVariable){
         abort_unless(\Gate::allows('product_edit'), 403);
-        $productVariable->update($request->all());
+        $productVariableOption = ProductVariableOption::find($request->product_variable_option_id);
+        $productVariable->variable_original_price=$request->variable_original_price;
+        $productVariable->variable_selling_price=$request->variable_selling_price;
+        $productVariable->product_variable_options_name=$productVariableOption->variable_name;
+        $productVariable->product_variable_option_size=$productVariableOption->variable_quantity;
+        $productVariable->save();
         $product=Product::find($request->product_id);
         return redirect()->route('admin.products.show',compact('product'));
 

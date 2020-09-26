@@ -121,6 +121,18 @@
                         </a>
                     </li>
                 @endcan
+                @can('view_banner')
+                    <li class="nav-item">
+                        <a href="{{ route("admin.banners.index") }}" class="nav-link {{ request()->is('admin/banners') || request()->is('admin/banners/*') ? 'active' : '' }}">
+                            <i class="fa fa-eercast">
+
+                            </i>
+                            <p>
+                                <span>App Banner</span>
+                            </p>
+                        </a>
+                    </li>
+                @endcan
                 @can('view_order')
                     <li class="nav-item">
                         <a href="{{ route("admin.orders.index") }}" class="nav-link {{ request()->is('admin/orders') || request()->is('admin/orders/*') ? 'active' : '' }}">

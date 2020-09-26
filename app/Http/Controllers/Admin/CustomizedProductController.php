@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\CustomProductVariable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreYadiProductRequest;
+use App\Http\Requests\UpdateYadiProductRequest;
 use App\MasalaIngradients;
 use Illuminate\Http\Request;
 use App\Http\Requests\MassDestroyProductRequest;
@@ -49,24 +50,24 @@ class CustomizedProductController extends Controller{
         return redirect()->route('admin.yadiProducts.index');
     }
 
-    public function edit(Product $product)
+    public function edit($id)
     {
         abort_unless(\Gate::allows('product_edit'), 403);
+        $product=Product::find($id);
         $productSubCategory=ProductSubCategory::all();
         return view('admin.yadiProducts.edit', compact(['product','productSubCategory']));
     }
 
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateYadiProductRequest $request, $id)
     {
         abort_unless(\Gate::allows('product_edit'), 403);
-//        $product = new Product;
-        if($request->hasFile('product_image_url')){
-            $product->product_image_url=$this->saveImage($request->product_image_url);
-        }
+//      $product = new Product;
+
+        $product=Product::find($id);
 
         $product->name=$request->name;
         $product->description=$request->description;
-        $product->product_subcategory_id=$request->product_subcategory_id;
+
         $product->save();
 
 
@@ -139,7 +140,13 @@ class CustomizedProductController extends Controller{
 
     public function variableUpdate(Request $request,ProductVariable $productVariable){
         abort_unless(\Gate::allows('product_edit'), 403);
-        $productVariable->update($request->all());
+        $productVariableOption = ProductVariableOption::find($request->product_variable_option_id);
+        $productVariable->variable_original_price=$request->variable_original_price;
+        $productVariable->variable_selling_price=$request->variable_selling_price;
+        $productVariable->product_variable_options_name=$productVariableOption->variable_name;
+        $productVariable->product_variable_option_size=$productVariableOption->variable_quantity;
+        $productVariable->save();
+
         $product=Product::find($request->product_id);
         return redirect()->route('admin.yadiProducts.show',$request->product_id);
 
@@ -201,7 +208,7 @@ class CustomizedProductController extends Controller{
         abort_unless(\Gate::allows('product_edit'), 403);
 
         $ingradients=MasalaIngradients::all();
-        $productVariable=ProductVariable::with('customVariables','customVariables.ingradient')->first();
+        $productVariable=ProductVariable::with('customVariables','customVariables.ingradient')->where('id',$id)->first();
         $customIngradients=CustomProductVariable::with('ingradient')->where('product_variable_id',$id)->get();
         return view('admin.yadiProducts.addFormula', compact(['ingradients','productVariable','customIngradients']));
     }

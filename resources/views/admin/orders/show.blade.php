@@ -26,7 +26,7 @@
         </div>
         <!-- /.col -->
         <div class="col-sm-4 invoice-col">
-            <b>Invoice No : {{$order->Invoice_No}}</b><br>
+            <b>Invoice No : {{$order->Invoice_no}}</b><br>
             <br>
             <b>Payment Status : </b> <span class="{{$order->payment_status!='paid'?'badge badge-danger':'badge badge-success'}}">{{$order->payment_status}}</span><br>
         </div>
@@ -55,7 +55,27 @@
                         <td>{{$orderDetail->productVariable->product_variable_options_name}}</td>
                         <td>{{$orderDetail->quantity}}</td>
                         <td>Rs. {{$orderDetail->variable_selling_price}} </td>
-                        <td>Rs. {{$orderDetail->quantity*$orderDetail->variable_selling_price}}</td>
+                        <td>Rs. {{$orderDetail->quantity*$orderDetail->variable_selling_price}} </td>
+                        @if($orderDetail->mirchiType!="none")
+                            <table class="table table-striped ml-5">
+                                <thead>
+                                <tr>
+                                    <th>Ingradient Name </th>
+                                    <th>Ingradient Qty</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                @foreach($orderDetail->customProductDetails as $key=>$customDetails)
+                                    <tr>
+                                        <td>{{$customDetails->ingradient->name }}</td>
+                                        <td>{{$customDetails->required_qty}}</td>
+
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                     </tr>
                 @endforeach
 
@@ -72,9 +92,11 @@
         <div class="col-6">
 
             @can('assign_delivery_boy')
-                <p class="lead">Assign Delivery Boy:</p>
-                @if($order->delivery_boy_id)
+
+                @if($order->delivery_boy_id && $order->deliveryBoy && $order->deliveryBoy->name)
                     <p>Current Delivery Boy : {{$order->deliveryBoy->name}}</p>
+                @else
+                    <p class="lead">Assign Delivery Boy: </p>
                 @endif
                 @if($order->order_status_id!=4)
                 <form action="{{ route("admin.orders.assignDeliveryBoy",$order->id) }}" method="POST" enctype="multipart/form-data">

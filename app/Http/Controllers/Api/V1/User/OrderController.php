@@ -2,11 +2,17 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 
+use App\CustomOrderDetails;
+use App\CustomProductVariable;
 use App\Http\Controllers\Controller;
 use App\Customer;
 use App\Address;
+use App\Mail\SendMail;
+use App\MasalaIngradients;
 use App\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Product;
 use App\OrderStatus;
@@ -46,6 +52,7 @@ class OrderController extends Controller{
                     'delivery_charge'=>30,
                     'total'=>0];
                 $allProductsInCart = $request->get('products');
+//                error_log($allProductsInCart);
                 foreach($allProductsInCart as $key=>$eachProduct){
                     $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
@@ -124,6 +131,8 @@ class OrderController extends Controller{
                     }
 
 
+
+
                 }
 
                 if($request->has('address_id')){
@@ -154,7 +163,7 @@ class OrderController extends Controller{
                 $response['tax']=$response['sub_total']*($this->tax/100);
                 $response['amount']=$response['sub_total']+$response['tax'];
                 $response['total']=$response['amount']+$response['delivery_charge']-$response['discount'];
-
+                $response['total']=round($response['total'], 2);
 
 
                 $order= new Order;
@@ -183,14 +192,17 @@ class OrderController extends Controller{
                 $order->address_id=$request->address_id;
                 $order->order_status_id=1;
                 $orderSaveStatus=$order->save();
+
+//                dd($response['total']*100);
                 if($orderSaveStatus){
 
                     $api_key=env('RAZOR_PAY_TEST_KEY');
                     $api_secret=env('RAZOR_PAY_TEST_SECRETE');
                     $api = new Api($api_key, $api_secret);
 
+
 // Orders
-                    $razorOrder  = $api->order->create(array('receipt' => $order->Invoice_No, 'amount' => $response['total']*100, 'currency' => 'INR',
+                    $razorOrder  = $api->order->create(array('receipt' => $order->Invoice_No, 'amount' => intval($response['total']*100), 'currency' => 'INR',
                         'payment_capture'=>'1')); // Creates order
                     $orderId = $razorOrder['id']; // Get the created Order ID
                     $order->payment_gatway_order_id=$orderId;
@@ -203,7 +215,29 @@ class OrderController extends Controller{
                             $orderDetails->product_variable_id=$eachProduct['productVariableId'];
                             $orderDetails->quantity=$eachProduct['productQuantity'];
                             $orderDetails->variable_selling_price=$product->variable_selling_price;
+                            if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)){
+                                $orderDetails->mirchiType=$eachProduct['customiseProductTypeOfMirchi'];
+                            }
                             $orderDetails->save();
+
+                            if( array_key_exists('isCustomiseProduct',$eachProduct) && $eachProduct['isCustomiseProduct']==1){
+                                $allIngradient = $eachProduct['ingredients'];
+
+                                foreach($allIngradient as $key=>$msalaIngradient){
+
+                                    $newCustomizedProduct =MasalaIngradients::where('id','=',$msalaIngradient['ingredientId'])->first();
+//                                    print_r($msalaIngradient['ingredientId']);
+                                    if($newCustomizedProduct!=null){
+                                        $newCustomeProductDetails = new CustomOrderDetails;
+                                        $newCustomeProductDetails->ingradient_id=$msalaIngradient['ingredientId'];
+                                        $newCustomeProductDetails->required_qty=$msalaIngradient['customiseProductQuantity'];
+                                        $newCustomeProductDetails->order_details_id=$orderDetails->id;
+                                        $newCustomeProductDetails->save();
+                                }
+
+                                }
+
+                            }
                         }
                     }
 
@@ -321,7 +355,7 @@ class OrderController extends Controller{
                     return response()->json(['success' => false,
                         'msg'=>'No User Found'], 200);
                 } else {
-                    $customerOrders = Order::with(['couponDetails','customer','orderDetails','orderDetails.productVariable','orderDetails.productVariable.product','orderStatus','address','deliveryBoy'])->where('customer_id','=',$customer->id)->orderBy('id','DESC')->get();
+                    $customerOrders = Order::with(['couponDetails','customer','orderDetails','orderDetails.productVariable','orderDetails.productVariable.product','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->where('customer_id','=',$customer->id)->orderBy('id','DESC')->get();
 
 //                    foreach ($customerOrders as $key=>$order){
 //                        $orderDetails=OrderDetails::with(['productVariable','productVariable.product'])->where('order_id',$order->id)->get();
@@ -354,10 +388,17 @@ class OrderController extends Controller{
                 return response()->json(['success' => false,
                     'msg'=>$validator->errors()], 200);
             }else{
-                $order = Order::where('id',$request->order_id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy'])->first();
-                $data = $order;
-                $pdf = PDF::loadHTML('vendor.invoices.default',$data);
-                return $pdf->stream();
+                $order = Order::where('id',$request->order_id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->first();
+                $data = compact($order);
+                $html = view('admin.orders.invoice', compact('order'))->render();
+                $pdf = App::make('dompdf.wrapper');
+                $invPDF = $pdf->loadHTML($html);
+                return $pdf->download('invoice.pdf');
+//                $pdf = PDF::loadHTML('admin.orders.invoice',compact('order'));
+////                Mail::to('mataleshubham@gmail.com')->send(new SendMail($order));
+////                return response()->json(['success' => false,
+////                    'data'=>"fcsd"], 200);;
+//                return $pdf->download('invoice.pdf');
             }
 
         }catch (Exception $e) {
