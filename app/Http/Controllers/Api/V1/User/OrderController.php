@@ -49,14 +49,32 @@ class OrderController extends Controller{
                     'tax'=>0,
                     'sub_total'=>0,
                     'discount'=>0,
-                    'delivery_charge'=>30,
-                    'total'=>0];
+                    'delivery_charge'=>0,
+                    'total'=>0,
+                    'grinding_charge'=>0,
+                    'product_total_weight'=>0];
                 $allProductsInCart = $request->get('products');
 //                error_log($allProductsInCart);
                 foreach($allProductsInCart as $key=>$eachProduct){
                     $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
                         $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
+                        $response['product_total_weight']=round($response['product_total_weight']+($eachProduct['productQuantity']*$product->product_variable_option_size), 2);
+                        if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1){
+                            switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                case "Medium Mirchi":
+                                    $response['sub_total']=$response['sub_total']+($product['medium_mirchi_price']*$eachProduct['productQuantity']);
+                                    break;
+                                case "Spicy Mirchi":
+                                    $response['sub_total']=$response['sub_total']+($product['spicy_mirchi_price']*$eachProduct['productQuantity']);
+                                    break;
+                                case "Mirchi":
+                                    $response['sub_total']=$response['sub_total']+($product['less_mirchi_price']*$eachProduct['productQuantity']);
+                                    break;
+                            }
+                            $response['grinding_charge']=$response['grinding_charge']+($product['grinding_price']*$eachProduct['productQuantity']);
+                            $response['sub_total']=$response['sub_total']+$response['grinding_charge'];
+                        }
                     }
 
 
@@ -64,9 +82,31 @@ class OrderController extends Controller{
 
                 if($request->has('address_id')){
                     $address = Address::find($request->address_id);
+                    $nashikPincodeArray=[422012,423502,422003,423201,423208,422209,422215,423301,423301,422004,422211,423202,422212,422206,422208,422010,422010,423204,422003,422001,422212,422001,422203,423402,423402,422213,423104,423202,423301,422208,422003,423303,423205,422212,422403,423501,423301,422202,422301,422205,423106,422103,422001,422401,423501,422401,422403,422204,422502,423106,422202,423401,422403,423401,422215,423102,422403,423117,422210,423202,422606,422005,422211,423101,422208,423402,423106,422205,423106,423502,422211,422208,422007,423213,422212,423303,422211,422001,422003,423212,424109,422201,423101,423502,422606,422210,423301,423301,422215,423205,423110,423206,423105,422209,422204,422101,423401,422203,423204,422001,422009,423201,423102,422104,423105,422204,423502,423301,422606,423101,423104,422003,422001,423202,422103,422209,422204,422305,423105,422308,423502,423401,423501,422203,422212,423102,422401,422501,422401,422103,422202,422202,422004,422403,423403,423213,423201,423106,423117,422103,422209,422208,422303,423401,423101,422202,422302,422606,422203,422305,423205,422103,422203,422011,423204,423208,423401,423202,422303,423205,422006,422006,422001,422203,422222,423501,423101,422402,423106,422203,423110,422002,423202,422606,422403,422305,423502,422103,422005,423104,422204,422001,422211,422208,422211,422211,423106,423106,423101,422112,422101,422403,422113,422101,422202,422007,422001,423502,422101,423303,422101,423202,424109,423401,423104,422001,422003,423106,422206,423106,422203,422206,422209,422002,422101,423101,423301,422308,422202,423106,422003,422204,422402,423105,423501,423104,423502,423301,422606,423117,423102,423301,422208,422210,423105,422202,423301,422209,423106,423206,423104,422303,422001,423208,422402,422202,423101,423301,423301,422304,422206,423117,423104,422403,423105,422402,423206,423301,422213,422606,423301,423301,423102,422204,422204,422004,423212,422403,422205,422202,422305,422201,422211,423403,423204,422103,423102,423301,422203,422208,422206,422103,422208,422206,422402,422202,422306,423204,423502,422303,423105,422211,422203,422208,423110,422308,423104,423502,422303,423403,423403,422401,422001,423213,422202,422306,423301,422103,422209,422210,422202,422001,422001,423213,422213,422003,422215,422203,422208,423105,423203,423104,423203,423212,423102,423403,423106,422103,422208,423101,422211,422001,423104,423104,423501,422606,423203,423102,422209,422003,423403,422215,423212,422004,423102,422210,422208,422004,422104,422206,423106,422211,423501,422403,423401,423301,423202,422403,422003,423201,423301,422403,422103,422204,423401,423104,423403,422101,422303,422202,422202,423204,422001,422305,422303,422308,423501,422606,422502,423501,422001,422001,422001,422101,422102,424109,422101,423101,422202,422202,423212,423212,422103,423401,423104,422303,422208,422606,423301,423501,422001,422206,422221,422207,422204,422302,423501,423502,422306,422209,423105,422202,422001,423205,422001,423501,422209,422202,422211,422101,422101,422103,422003,422215,422502,422211,422103,424109,422215,422103,423101,422010,422104,423201,423401,422103,422208,423301,422103,423202,422012,422209,422401,422213,423401,422010,422101,423102,423202,422004,424109,422306,423502,422301,422301,422215,422003,423206,423106,422007,423101,422003,423104,423403,423205,422001,423102,422308,422003,423108,423501,422001,423111,422306,422203,423105,422305,423501,423106,422209,422403,423212,422211,422212,423203,422402,422203,423501,422211,423204,422303,423301,423301,422211,422007,423208,423401,423208,423301,422013,422104,423402,422210,423105,422401,422104,423101,423213,422401,423105,422402,422101,422205,423104,422210,422206,422204,423401,423501,423204,423208,423111,422303,422502,422215,422211,422103,423101,423303,423401,422103,423208,422103,422205,423105,422302,423402,422211,422208,422105,423202,423208,422306,422403,422403,422212,422213,423104,422004,423401,423301,422210,423303,423105,423204,422204,423401,423301,423301,423205,423110,422202,423105,422212,422212,422213,422008,422402,422005,422304,422209,422211,422211,422003,423110,423402,422208,423104,423204,423106,423117,422103,423101,423206,423105,423104,422502,423111,422401,423206,422101,422306,422214,423105,423206,422304,422215,422202,423104,423301,422205,423301,423108,423106,422212,423401,422010,422203,422305,422502,423206,423301,423301,423101,423301,422006,422206,422203,422403,423202,422403,422003,422203,423102,422305,423106,422402,422202,422202,423501,422403,422104,422212,422222,423401,423401,423212,423208,422212,423205];
                     if($address!=null){
                         $distance = $this->getDistanceFromLatLonInKm($address->latitude,$address->longitude,19.9851074,73.743269);
-                        $response['delivery_charge']=$distance+$this->rate_per_km;
+                        if(in_array($address->pincode,$nashikPincodeArray)){
+                            if($response['product_total_weight']<1) {
+                                $response['delivery_charge'] = 25;
+                            }
+                            else{
+                                $response['delivery_charge'] = round(ceil($response['product_total_weight'])*25,2);
+                            }
+                        }elseif ($this->startsWith($address->pincode,'40') || $this->startsWith($address->pincode,'41') || $this->startsWith($address->pincode,'42')||$this->startsWith($address->pincode,'43')||$this->startsWith($address->pincode,'44')){
+                            if($response['product_total_weight']<1) {
+                                $response['delivery_charge'] = 40;
+                            }
+                            else{
+                                $response['delivery_charge'] = round(ceil($response['product_total_weight'])*40,2);
+                            }
+                        }else{
+                            if($response['product_total_weight']<1) {
+                                $response['delivery_charge'] = 70;
+                            }
+                            else{
+                                $response['delivery_charge'] = round(ceil($response['product_total_weight'])*70,2);
+                            }
+                        }
                     }
                 }
                 if($request->has('promocode')){
@@ -122,12 +162,30 @@ class OrderController extends Controller{
                     'sub_total'=>0,
                     'discount'=>0,
                     'delivery_charge'=>30,
-                    'total'=>0];
+                    'total'=>0,
+                    'grinding_charge'=>0,
+                    'product_total_weight'=>0];
                 $allProductsInCart = $request->get('products');
                 foreach($allProductsInCart as $key=>$eachProduct){
                     $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
                         $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
+                        $response['product_total_weight']=round($response['product_total_weight']+($eachProduct['productQuantity']*$product->product_variable_option_size), 2);
+                        if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1){
+                            switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                case "Medium Mirchi":
+                                    $response['sub_total']=$response['sub_total']+($product['medium_mirchi_price']*$eachProduct['productQuantity']);
+                                    break;
+                                case "Spicy Mirchi":
+                                    $response['sub_total']=$response['sub_total']+($product['spicy_mirchi_price']*$eachProduct['productQuantity']);
+                                    break;
+                                case "Mirchi":
+                                    $response['sub_total']=$response['sub_total']+($product['less_mirchi_price']*$eachProduct['productQuantity']);
+                                    break;
+                            }
+                            $response['grinding_charge']=$response['grinding_charge']+($product['grinding_price']*$eachProduct['productQuantity']);
+                            $response['sub_total']=$response['sub_total']+$response['grinding_charge'];
+                        }
                     }
 
 
@@ -137,9 +195,31 @@ class OrderController extends Controller{
 
                 if($request->has('address_id')){
                     $address = Address::find($request->address_id);
+                    $nashikPincodeArray=[422012,423502,422003,423201,423208,422209,422215,423301,423301,422004,422211,423202,422212,422206,422208,422010,422010,423204,422003,422001,422212,422001,422203,423402,423402,422213,423104,423202,423301,422208,422003,423303,423205,422212,422403,423501,423301,422202,422301,422205,423106,422103,422001,422401,423501,422401,422403,422204,422502,423106,422202,423401,422403,423401,422215,423102,422403,423117,422210,423202,422606,422005,422211,423101,422208,423402,423106,422205,423106,423502,422211,422208,422007,423213,422212,423303,422211,422001,422003,423212,424109,422201,423101,423502,422606,422210,423301,423301,422215,423205,423110,423206,423105,422209,422204,422101,423401,422203,423204,422001,422009,423201,423102,422104,423105,422204,423502,423301,422606,423101,423104,422003,422001,423202,422103,422209,422204,422305,423105,422308,423502,423401,423501,422203,422212,423102,422401,422501,422401,422103,422202,422202,422004,422403,423403,423213,423201,423106,423117,422103,422209,422208,422303,423401,423101,422202,422302,422606,422203,422305,423205,422103,422203,422011,423204,423208,423401,423202,422303,423205,422006,422006,422001,422203,422222,423501,423101,422402,423106,422203,423110,422002,423202,422606,422403,422305,423502,422103,422005,423104,422204,422001,422211,422208,422211,422211,423106,423106,423101,422112,422101,422403,422113,422101,422202,422007,422001,423502,422101,423303,422101,423202,424109,423401,423104,422001,422003,423106,422206,423106,422203,422206,422209,422002,422101,423101,423301,422308,422202,423106,422003,422204,422402,423105,423501,423104,423502,423301,422606,423117,423102,423301,422208,422210,423105,422202,423301,422209,423106,423206,423104,422303,422001,423208,422402,422202,423101,423301,423301,422304,422206,423117,423104,422403,423105,422402,423206,423301,422213,422606,423301,423301,423102,422204,422204,422004,423212,422403,422205,422202,422305,422201,422211,423403,423204,422103,423102,423301,422203,422208,422206,422103,422208,422206,422402,422202,422306,423204,423502,422303,423105,422211,422203,422208,423110,422308,423104,423502,422303,423403,423403,422401,422001,423213,422202,422306,423301,422103,422209,422210,422202,422001,422001,423213,422213,422003,422215,422203,422208,423105,423203,423104,423203,423212,423102,423403,423106,422103,422208,423101,422211,422001,423104,423104,423501,422606,423203,423102,422209,422003,423403,422215,423212,422004,423102,422210,422208,422004,422104,422206,423106,422211,423501,422403,423401,423301,423202,422403,422003,423201,423301,422403,422103,422204,423401,423104,423403,422101,422303,422202,422202,423204,422001,422305,422303,422308,423501,422606,422502,423501,422001,422001,422001,422101,422102,424109,422101,423101,422202,422202,423212,423212,422103,423401,423104,422303,422208,422606,423301,423501,422001,422206,422221,422207,422204,422302,423501,423502,422306,422209,423105,422202,422001,423205,422001,423501,422209,422202,422211,422101,422101,422103,422003,422215,422502,422211,422103,424109,422215,422103,423101,422010,422104,423201,423401,422103,422208,423301,422103,423202,422012,422209,422401,422213,423401,422010,422101,423102,423202,422004,424109,422306,423502,422301,422301,422215,422003,423206,423106,422007,423101,422003,423104,423403,423205,422001,423102,422308,422003,423108,423501,422001,423111,422306,422203,423105,422305,423501,423106,422209,422403,423212,422211,422212,423203,422402,422203,423501,422211,423204,422303,423301,423301,422211,422007,423208,423401,423208,423301,422013,422104,423402,422210,423105,422401,422104,423101,423213,422401,423105,422402,422101,422205,423104,422210,422206,422204,423401,423501,423204,423208,423111,422303,422502,422215,422211,422103,423101,423303,423401,422103,423208,422103,422205,423105,422302,423402,422211,422208,422105,423202,423208,422306,422403,422403,422212,422213,423104,422004,423401,423301,422210,423303,423105,423204,422204,423401,423301,423301,423205,423110,422202,423105,422212,422212,422213,422008,422402,422005,422304,422209,422211,422211,422003,423110,423402,422208,423104,423204,423106,423117,422103,423101,423206,423105,423104,422502,423111,422401,423206,422101,422306,422214,423105,423206,422304,422215,422202,423104,423301,422205,423301,423108,423106,422212,423401,422010,422203,422305,422502,423206,423301,423301,423101,423301,422006,422206,422203,422403,423202,422403,422003,422203,423102,422305,423106,422402,422202,422202,423501,422403,422104,422212,422222,423401,423401,423212,423208,422212,423205];
                     if($address!=null){
                         $distance = $this->getDistanceFromLatLonInKm($address->latitude,$address->longitude,19.9851074,73.743269);
-                        $response['delivery_charge']=$distance+$this->rate_per_km;
+                        if(in_array($address->pincode,$nashikPincodeArray)){
+                            if($response['product_total_weight']<1) {
+                                $response['delivery_charge'] = 25;
+                            }
+                            else{
+                                $response['delivery_charge'] = round(ceil($response['product_total_weight'])*25,2);
+                            }
+                        }elseif ($this->startsWith($address->pincode,'40') || $this->startsWith($address->pincode,'41') || $this->startsWith($address->pincode,'42')||$this->startsWith($address->pincode,'43')||$this->startsWith($address->pincode,'44')){
+                            if($response['product_total_weight']<1) {
+                                $response['delivery_charge'] = 40;
+                            }
+                            else{
+                                $response['delivery_charge'] = round(ceil($response['product_total_weight'])*40,2);
+                            }
+                        }else{
+                            if($response['product_total_weight']<1) {
+                                $response['delivery_charge'] = 70;
+                            }
+                            else{
+                                $response['delivery_charge'] = round(ceil($response['product_total_weight'])*70,2);
+                            }
+                        }
                     }
                 }
                 $couponCode=null;
@@ -171,6 +251,7 @@ class OrderController extends Controller{
                 $order->total_amount = $response['total'];
                 $order->sub_total = $response['sub_total'];
                 $order->discount = $response['discount'];
+                $order->grinding_charge = $response['grinding_charge'];
                 $order->tax = $response['tax'];
                 if($couponCode!=null){
                     $order->coupon_code_id =$couponCode->id;
@@ -182,7 +263,7 @@ class OrderController extends Controller{
                     $order->alternate_no = 'none';
                 }
 
-                $customer=Customer::where('mobile_no','=',$request->mobile_no)->first();
+                $customer=Customer::where('mobile_no','=',trim($request->mobile_no))->first();
                 if ($customer==null) {
                     return response()->json(['success' => false,
                         'msg'=>'No User Found'], 200);
@@ -196,8 +277,8 @@ class OrderController extends Controller{
 //                dd($response['total']*100);
                 if($orderSaveStatus){
 
-                    $api_key=env('RAZOR_PAY_TEST_KEY');
-                    $api_secret=env('RAZOR_PAY_TEST_SECRETE');
+                    $api_key="rzp_test_rY0vOBNRFJeB5T";
+                    $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
                     $api = new Api($api_key, $api_secret);
 
 
@@ -219,6 +300,7 @@ class OrderController extends Controller{
                                 $orderDetails->mirchiType=$eachProduct['customiseProductTypeOfMirchi'];
                             }
                             $orderDetails->save();
+
 
                             if( array_key_exists('isCustomiseProduct',$eachProduct) && $eachProduct['isCustomiseProduct']==1){
                                 $allIngradient = $eachProduct['ingredients'];
@@ -349,7 +431,7 @@ class OrderController extends Controller{
                     'msg'=>$validator->errors()], 200);
             }
             else {
-                $customer=Customer::where('mobile_no','=',$request->mobile_no)->first();
+                $customer=Customer::where('mobile_no','=',trim($request->mobile_no))->first();
 
                 if ($customer==null) {
                     return response()->json(['success' => false,
@@ -391,13 +473,19 @@ class OrderController extends Controller{
                 $order = Order::where('id',$request->order_id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->first();
                 $data = compact($order);
                 $html = view('admin.orders.invoice', compact('order'))->render();
-                $pdf = App::make('dompdf.wrapper');
-                $invPDF = $pdf->loadHTML($html);
-                return $pdf->download('invoice.pdf');
+//                dd($html);
+//                $pdf = App::make('dompdf.wrapper');
+//                PDF::setOptions(['dpi' => 150, 'defaultFont' => 'DejaVu Sans']);
+//                $invPDF = $pdf->loadHTML($html);
+//                return $pdf->download('invoice.pdf');
 //                $pdf = PDF::loadHTML('admin.orders.invoice',compact('order'));
-////                Mail::to('mataleshubham@gmail.com')->send(new SendMail($order));
-////                return response()->json(['success' => false,
-////                    'data'=>"fcsd"], 200);;
+//                Mail::send(array(), array(), function ($message) use ($html) {
+//                    $message->to('mataleshubham@gmail.com')
+//                    ->subject('invoice')
+//                    ->setBody($html, 'text/html');
+//});
+                Mail::to('mataleshubham@gmail.com')->queue(new SendMail($order));
+                return response()->json(['success' => false,'data'=>"fcsd"], 200);;
 //                return $pdf->download('invoice.pdf');
             }
 
@@ -405,5 +493,11 @@ class OrderController extends Controller{
             return response()->json(['success' => false,
                 'data'=>$e], 200);
         }
+    }
+
+    function startsWith ($string, $startString)
+    {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
     }
 }

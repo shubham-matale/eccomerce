@@ -18,29 +18,7 @@
     <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
 
-    <style type="text/css" media="screen">
-        * {
-            font-family: "DejaVu Sans";
-        }
-        html {
-            margin: 0;
-        }
-        body {
-            font-size: 10px;
-            margin: 36pt;
-        }
-        body, h1, h2, h3, h4, h5, h6, table, th, tr, td, p, div {
-            line-height: 1.1;
-        }
-        .party-header {
-            font-size: 1.5rem;
-            font-weight: 400;
-        }
-        .total-amount {
-            font-size: 12px;
-            font-weight: 700;
-        }
-    </style>
+
 </head>
 
 <body>

@@ -21,7 +21,7 @@ class CustomerApiController extends Controller{
                     'msg'=>$validator->errors()], 200);
             }
             else {
-                $customer=Customer::where('mobile_no','=',$request->mobile_no)->first();
+                $customer=Customer::where('mobile_no','=',trim($request->mobile_no))->first();
 
                 if ($customer==null) {
                     return response()->json(['success' => true,
@@ -80,7 +80,7 @@ class CustomerApiController extends Controller{
                     'msg'=>$validator->errors()], 200);
             }
             else {
-                $customer=Customer::where('mobile_no','=',$request->mobile_no)->first();
+                $customer=Customer::where('mobile_no','=',trim($request->mobile_no))->first();
 
                 if ($customer==null) {
                     return response()->json(['success' => false,
@@ -118,7 +118,7 @@ class CustomerApiController extends Controller{
                     'msg'=>$validator->errors()], 200);
             }
             else {
-                $customer=Customer::where('mobile_no','=',$request->mobile_no)->first();
+                $customer=Customer::where('mobile_no','=',trim($request->mobile_no))->first();
                 if ($customer==null) {
                     return response()->json(['success' => false,
                         'msg'=>'No User Found'], 200);

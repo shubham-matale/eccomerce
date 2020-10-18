@@ -40,6 +40,7 @@
                         @endif
 
                     </div>
+
                     <div class="form-group col-md-4 {{ $errors->has('quantity') ? 'has-error' : '' }}">
                         <label for="price">Quantity*</label>
                         <input type="number" id="quantity" name="quantity" required min="1" class="form-control" value="{{ old('quantity', isset($productVariable) ? $productVariable->quantity : '') }}" step="0.01">
@@ -51,6 +52,50 @@
                         <p class="helper-block">
                             {{ trans('global.product.fields.price_helper') }}
                         </p>
+                    </div>
+
+                    <div class="form-group col-4 {{ $errors->has('spicy_mirchi_price') ? 'has-error' : '' }}">
+                        <label for="variable_selling_price">Spicy Mirchi Price*</label>
+                        <input type="number" id="spicy_mirchi_price" name="spicy_mirchi_price" class="form-control" value="{{ old('spicy_mirchi_price', isset($productVariable) ? $productVariable->spicy_mirchi_price : '') }}" step="0.01" required>
+                        @if($errors->has('spicy_mirchi_price'))
+                            <p class="help-block">
+                                {{ $errors->first('spicy_mirchi_price') }}
+                            </p>
+                        @endif
+
+                    </div>
+
+                    <div class="form-group col-4 {{ $errors->has('medium_mirchi_price') ? 'has-error' : '' }}">
+                        <label for="variable_selling_price">Medium Mirchi Price*</label>
+                        <input type="number" id="medium_mirchi_price" name="medium_mirchi_price" class="form-control" value="{{ old('medium_mirchi_price', isset($productVariable) ? $productVariable->medium_mirchi_price : '') }}" step="0.01" required>
+                        @if($errors->has('medium_mirchi_price'))
+                            <p class="help-block">
+                                {{ $errors->first('medium_mirchi_price') }}
+                            </p>
+                        @endif
+
+                    </div>
+
+                    <div class="form-group col-4 {{ $errors->has('less_mirchi_price') ? 'has-error' : '' }}">
+                        <label for="variable_selling_price">Less Spicy Mirchi Price*</label>
+                        <input type="number" id="less_mirchi_price" name="less_mirchi_price" class="form-control" value="{{ old('less_mirchi_price', isset($productVariable) ? $productVariable->less_mirchi_price : '') }}" step="0.01" required>
+                        @if($errors->has('less_mirchi_price'))
+                            <p class="help-block">
+                                {{ $errors->first('less_mirchi_price') }}
+                            </p>
+                        @endif
+
+                    </div>
+
+                    <div class="form-group col-4 {{ $errors->has('grinding_price') ? 'has-error' : '' }}">
+                        <label for="variable_selling_price">Grinding Price*</label>
+                        <input type="number" id="grinding_price" name="grinding_price" class="form-control" value="{{ old('grinding_price', isset($productVariable) ? $productVariable->grinding_price : '') }}" step="0.01" required>
+                        @if($errors->has('grinding_price'))
+                            <p class="help-block">
+                                {{ $errors->first('grinding_price') }}
+                            </p>
+                        @endif
+
                     </div>
                 </div>
                 <div>

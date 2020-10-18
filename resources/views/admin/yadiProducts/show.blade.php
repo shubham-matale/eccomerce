@@ -31,7 +31,7 @@
         <div class="card mt-4">
             <div class="card-body">
                 <div class="row ">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div style="margin-bottom: 10px;" class="row">
                             <div class="col-lg-12">
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-variable">
@@ -52,6 +52,18 @@
                                         Variable Selling Price
                                     </th>
                                     <th>
+                                        Spicy Mirchi Price
+                                    </th>
+                                    <th>
+                                        Medium Mirchi Price
+                                    </th>
+                                    <th>
+                                        Less Spicy Mirchi Price
+                                    </th>
+                                    <th>
+                                        Grinding Price
+                                    </th>
+                                    <th>
                                     </th>
                                 </tr>
                             </thead>
@@ -66,6 +78,18 @@
                                     </th>
                                     <th>
                                         {{$productVariable->variable_selling_price}}
+                                    </th>
+                                    <th>
+                                        {{$productVariable->spicy_mirchi_price}}
+                                    </th>
+                                    <th>
+                                        {{$productVariable->medium_mirchi_price}}
+                                    </th>
+                                    <th>
+                                        {{$productVariable->less_mirchi_price}}
+                                    </th>
+                                    <th>
+                                        {{$productVariable->grinding_price}}
                                     </th>
                                     <th>
                                         <a class="btn btn-xs btn-info" href="{{ route('admin.yadiProducts.addFormula', $productVariable->id) }}">
@@ -202,7 +226,53 @@
                                 {{ trans('global.product.fields.price_helper') }}
                             </p>
                         </div>
-                    </div>
+
+                        <div class="form-group col-4 {{ $errors->has('spicy_mirchi_price') ? 'has-error' : '' }}">
+                            <label for="variable_selling_price">Spicy Mirchi Price*</label>
+                            <input type="number" id="spicy_mirchi_price" name="spicy_mirchi_price" class="form-control" value="{{ old('spicy_mirchi_price', isset($productVariable) ? $productVariable->spicy_mirchi_price : '') }}" step="0.01" required>
+                            @if($errors->has('spicy_mirchi_price'))
+                                <p class="help-block">
+                                    {{ $errors->first('spicy_mirchi_price') }}
+                                </p>
+                            @endif
+
+                        </div>
+
+                        <div class="form-group col-4 {{ $errors->has('medium_mirchi_price') ? 'has-error' : '' }}">
+                            <label for="variable_selling_price">Medium Mirchi Price*</label>
+                            <input type="number" id="medium_mirchi_price" name="medium_mirchi_price" class="form-control" value="{{ old('medium_mirchi_price', isset($productVariable) ? $productVariable->medium_mirchi_price : '') }}" step="0.01" required>
+                            @if($errors->has('medium_mirchi_price'))
+                                <p class="help-block">
+                                    {{ $errors->first('medium_mirchi_price') }}
+                                </p>
+                            @endif
+
+                        </div>
+
+                        <div class="form-group col-4 {{ $errors->has('less_mirchi_price') ? 'has-error' : '' }}">
+                            <label for="variable_selling_price">Less Spicy Mirchi Price*</label>
+                            <input type="number" id="less_mirchi_price" name="less_mirchi_price" class="form-control" value="{{ old('less_mirchi_price', isset($productVariable) ? $productVariable->less_mirchi_price : '') }}" step="0.01" required>
+                            @if($errors->has('less_mirchi_price'))
+                                <p class="help-block">
+                                    {{ $errors->first('less_mirchi_price') }}
+                                </p>
+                            @endif
+
+                        </div>
+
+                        <div class="form-group col-4 {{ $errors->has('grinding_price') ? 'has-error' : '' }}">
+                            <label for="variable_selling_price">Grinding Price*</label>
+                            <input type="number" id="grinding_price" name="grinding_price" class="form-control" value="{{ old('grinding_price', isset($productVariable) ? $productVariable->grinding_price : '') }}" step="0.01" required>
+                            @if($errors->has('grinding_price'))
+                                <p class="help-block">
+                                    {{ $errors->first('grinding_price') }}
+                                </p>
+                            @endif
+
+                        </div>
+                        </div>
+
+
 
             </div>
             <div class="modal-footer justify-content-between">

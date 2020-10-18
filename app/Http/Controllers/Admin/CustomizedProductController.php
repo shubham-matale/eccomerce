@@ -109,6 +109,10 @@ class CustomizedProductController extends Controller{
             'product_variable_option_id' =>'required',
             'variable_original_price'    => 'required|numeric',
             'variable_selling_price'     => 'required|numeric',
+            'spicy_mirchi_price'         => 'required|numeric',
+            'less_mirchi_price'         => 'required|numeric',
+            'medium_mirchi_price'         => 'required|numeric',
+            'grinding_price'         => 'required|numeric',
             'quantity'                   =>'required|numeric'
         ]);
 
@@ -116,6 +120,10 @@ class CustomizedProductController extends Controller{
         $productvariable = new ProductVariable;
         $productvariable->variable_original_price=$request->variable_original_price;
         $productvariable->variable_selling_price=$request->variable_selling_price;
+        $productvariable->spicy_mirchi_price=$request->spicy_mirchi_price;
+        $productvariable->less_mirchi_price=$request->less_mirchi_price;
+        $productvariable->medium_mirchi_price=$request->medium_mirchi_price;
+        $productvariable->grinding_price=$request->grinding_price;
         $productvariable->product_variable_options_name=$productVariableOption->variable_name;
         $productvariable->product_variable_option_size=$productVariableOption->variable_quantity;
         $productvariable->quantity=$request->quantity;
@@ -145,6 +153,10 @@ class CustomizedProductController extends Controller{
         $productVariable->variable_selling_price=$request->variable_selling_price;
         $productVariable->product_variable_options_name=$productVariableOption->variable_name;
         $productVariable->product_variable_option_size=$productVariableOption->variable_quantity;
+        $productVariable->spicy_mirchi_price=$request->spicy_mirchi_price;
+        $productVariable->less_mirchi_price=$request->less_mirchi_price;
+        $productVariable->medium_mirchi_price=$request->medium_mirchi_price;
+        $productVariable->grinding_price=$request->grinding_price;
         $productVariable->save();
 
         $product=Product::find($request->product_id);

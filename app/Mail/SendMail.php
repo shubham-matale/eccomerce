@@ -29,6 +29,9 @@ class SendMail extends Mailable
     public function build()
     {
         $order = $this->data;
-        return $this->subject('Invoice from Shree Kakaji Masale')->view('admin.orders.invoice',compact('order'));
+        $html = view('admin.orders.invoice', compact('order'))->render();
+
+        return $this->subject('Invoice from Shree Kakaji Masale')->view('admin.orders.mail')->with('text', $html);
+
     }
 }
