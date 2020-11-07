@@ -80,6 +80,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('orders', 'OrderController');
 
     Route::post('orders/assignDeliveryBoy/{id}', 'OrderController@assignDeliveryBoy')->name('orders.assignDeliveryBoy');
+    Route::get('orders/printReceipt/{id}', 'OrderController@printReceipt')->name('orders.printReceipt');
 
     //Coupons
 
@@ -101,19 +102,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('tickets/getMessage/{id}','TicketsController@getMessage')->name('tickets.getMessage');
 
+
+    Route::get('download-jsonfile','LanguageController@CreateLanguagrTranslationFile')->name('file.download');
+
+//    Route::get('download-jsonfile', array('as'=> '', 'uses' => ''));
+
 });
+
 Route::redirect('/home', 'admin/');
 
-Route::any ( 'sendemail', function () {
-
-        $data [] = '';
-    Mail::send ( 'email', $data, function ($message) {
-
-//        $message->from ( 'donotreply@demo.com', 'Just Laravel' );
-
-        $message->to ( "mataleshubham@gmail.com"  )->subject ( 'Just Laravel demo email using SendGrid' );
-    } );
-//    return Redirect::back ()->withErrors ( [
-//        'Your email has been sent successfully'
-//    ] );
-} );
+//Route::any ( 'sendemail', function () {
+//
+//        $data [] = '';
+//    Mail::send ( 'email', $data, function ($message) {
+//
+////        $message->from ( 'donotreply@demo.com', 'Just Laravel' );
+//
+//        $message->to ( "mataleshubham@gmail.com"  )->subject ( 'Just Laravel demo email using SendGrid' );
+//    } );
+////    return Redirect::back ()->withErrors ( [
+////        'Your email has been sent successfully'
+////    ] );
+//} );

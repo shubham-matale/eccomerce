@@ -57,6 +57,16 @@ class OrderController extends Controller
 
     }
 
+    public function printReceipt(Request $request,$id){
+        abort_unless(\Gate::allows('view_order'), 403);
+        $delivery_boy_list = User::whereHas('roles',function ($role){
+            $role->where('title','=','delivery_boy');
+        })->get();
+        $order = Order::where('id',$id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->first();
+
+        return view('admin.orders.receipt.index', compact(['order','delivery_boy_list']));
+    }
+
 
     public function edit($id)
     {

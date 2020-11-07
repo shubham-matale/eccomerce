@@ -180,7 +180,45 @@
       }
     ]
   });
+            $(document).ready(function(){
+                $.fn.dataTable.ext.search.push(
+                    function (settings, data, dataIndex) {
+                        var min = $('#min').datepicker("getDate");
+                        var max = $('#max').datepicker("getDate");
+                        var startDate = new Date(data[10]);
+                        if (min == null && max == null) { return true; }
+                        if (min == null && startDate <= max) { return true;}
+                        if(max == null && startDate >= min) {return true;}
+                        if (startDate <= max && startDate >= min) { return true; }
+                        return false;
+                    },
+                    function( settings, data, dataIndex ) {
+                        var minAmount = parseInt( $('#minAmount').val(), 10 );
+                        var maxAmount = parseInt( $('#maxAmount').val(), 10 );
+                        var age = parseFloat( data[7] ) || 0; // use data for the age column
+                        console.log('age',data[7],age,minAmount,maxAmount)
+                        if ( ( isNaN( minAmount ) && isNaN( maxAmount ) ) ||
+                            ( isNaN( minAmount ) && age <= maxAmount ) ||
+                            ( minAmount <= age   && isNaN( maxAmount ) ) ||
+                            ( minAmount <= age   && age <= maxAmount ) )
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
 
+                );
+
+
+                $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+                $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+                var table = $('#orderTable').DataTable();
+
+                // Event listener to the two range filtering inputs to redraw on input
+                $('#min, #max, #minAmount,#maxAmount').change(function () {
+                    table.draw();
+                });
+            });
   $.fn.dataTable.ext.classes.sPageButton = '';
 });
 

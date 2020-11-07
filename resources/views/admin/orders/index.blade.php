@@ -25,10 +25,27 @@
                 </ul>
             </div>
             <div class="card-body">
+                <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody>
+                    <tr>
+                        <td>Created Minimum Date:</td>
+                        <td><input name="min" id="min" type="text"></td>
+                        <td>Created Maximum Date:</td>
+                        <td><input name="max" id="max" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Minimum Amount:</td>
+                        <td><input name="minAmount" id="minAmount" type="number"></td>
+                        <td>Maximum Amount:</td>
+                        <td><input name="maxAmount" id="maxAmount" type="number"></td>
+                    </tr>
+                    </tbody>
+                </table>
                 <div class="tab-content" id="custom-tabs-one-tabContent">
                     <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                         <div class="table-responsive">
-                            <table class=" table table-bordered table-striped table-hover datatable">
+
+                            <table class=" table table-bordered table-striped table-hover datatable" id="orderTable">
                                 <thead>
                                 <tr>
                                     <th width="10">
@@ -37,6 +54,21 @@
                                     <th>
                                         Invoice No
                                     </th>
+                                    <th>
+                                        SubTotal
+                                    </th>
+                                    <th>
+                                        Discount
+                                    </th>
+                                    <th>
+                                        Delivery Charge
+                                    </th>
+                                    <th>
+                                        Grinding Charge
+                                    </th>
+                                    <td>
+                                        Tax
+                                    </td>
                                     <th>
                                         Total Amount
                                     </th>
@@ -61,10 +93,15 @@
                                         <tr>
                                             <td></td>
                                             <td>{{$order->Invoice_No}}</td>
+                                            <td>{{$order->sub_total}}</td>
+                                            <td>{{$order->discount}}</td>
+                                            <td>{{$order->delivery_charge}}</td>
+                                            <td>{{$order->grinding_charge}}</td>
+                                            <td>{{$order->tax}}</td>
                                             <td>{{$order->total_amount}}</td>
                                             <th>{{$order->customer->name}}</th>
                                             <th ><span class="badge badge-success">{{$order->couponDetails!==null?$order->couponDetails->code:''}}</span></th>
-                                            <td>{{$order->created_at}}</td>
+                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('m/d/Y')}}</td>
                                             <td>
                                                 <a class="btn btn-xs btn-primary" href="{{ route('admin.orders.show', $order->id) }}">
                                                     {{ trans('global.view') }}
@@ -90,6 +127,21 @@
                                         Invoice No
                                     </th>
                                     <th>
+                                        SubTotal
+                                    </th>
+                                    <th>
+                                        Discount
+                                    </th>
+                                    <th>
+                                        Delivery Charge
+                                    </th>
+                                    <th>
+                                        Grinding Charge
+                                    </th>
+                                    <td>
+                                        Tax
+                                    </td>
+                                    <th>
                                         Total Amount
                                     </th>
                                     <th>
@@ -113,6 +165,11 @@
                                         <tr>
                                             <td></td>
                                             <td>{{$order->Invoice_No}}</td>
+                                            <td>{{$order->sub_total}}</td>
+                                            <td>{{$order->discount}}</td>
+                                            <td>{{$order->delivery_charge}}</td>
+                                            <td>{{$order->grinding_charge}}</td>
+                                            <td>{{$order->tax}}</td>
                                             <td>{{$order->total_amount}}</td>
                                             <th>{{$order->customer->name}}</th>
                                             <th ><span class="badge badge-success">{{$order->couponDetails!==null?$order->couponDetails->code:''}}</span></th>
@@ -142,6 +199,21 @@
                                         Invoice No
                                     </th>
                                     <th>
+                                        SubTotal
+                                    </th>
+                                    <th>
+                                        Discount
+                                    </th>
+                                    <th>
+                                        Delivery Charge
+                                    </th>
+                                    <th>
+                                        Grinding Charge
+                                    </th>
+                                    <td>
+                                        Tax
+                                    </td>
+                                    <th>
                                         Total Amount
                                     </th>
                                     <th>
@@ -165,6 +237,11 @@
                                         <tr>
                                             <td></td>
                                             <td>{{$order->Invoice_No}}</td>
+                                            <td>{{$order->sub_total}}</td>
+                                            <td>{{$order->discount}}</td>
+                                            <td>{{$order->delivery_charge}}</td>
+                                            <td>{{$order->grinding_charge}}</td>
+                                            <td>{{$order->tax}}</td>
                                             <td>{{$order->total_amount}}</td>
                                             <th>{{$order->customer->name}}</th>
                                             <th ><span class="badge badge-success">{{$order->couponDetails!==null?$order->couponDetails->code:''}}</span></th>
@@ -194,6 +271,21 @@
                                         Invoice No
                                     </th>
                                     <th>
+                                        SubTotal
+                                    </th>
+                                    <th>
+                                        Discount
+                                    </th>
+                                    <th>
+                                        Delivery Charge
+                                    </th>
+                                    <th>
+                                        Grinding Charge
+                                    </th>
+                                    <td>
+                                        Tax
+                                    </td>
+                                    <th>
                                         Total Amount
                                     </th>
                                     <th>
@@ -217,6 +309,11 @@
                                         <tr>
                                             <td></td>
                                             <td>{{$order->Invoice_No}}</td>
+                                            <td>{{$order->sub_total}}</td>
+                                            <td>{{$order->discount}}</td>
+                                            <td>{{$order->delivery_charge}}</td>
+                                            <td>{{$order->grinding_charge}}</td>
+                                            <td>{{$order->tax}}</td>
                                             <td>{{$order->total_amount}}</td>
                                             <th>{{$order->customer->name}}</th>
                                             <th ><span class="badge badge-success">{{$order->couponDetails!==null?$order->couponDetails->code:''}}</span></th>
@@ -300,6 +397,7 @@
         @section('scripts')
             @parent
             <script>
+
                 $(function () {
                     {{--let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'--}}
                     {{--let deleteButton = {--}}

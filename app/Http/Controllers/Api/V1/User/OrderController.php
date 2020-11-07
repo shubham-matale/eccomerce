@@ -376,8 +376,11 @@ class OrderController extends Controller{
 
     public function checkPaymentStatus(Request $request){
         try {
-            $api_key=env('RAZOR_PAY_TEST_KEY');
-            $api_secret=env('RAZOR_PAY_TEST_SECRETE');
+//            $api_key=env('RAZOR_PAY_TEST_KEY');
+//            $api_secret=env('RAZOR_PAY_TEST_SECRETE');
+
+            $api_key="rzp_test_rY0vOBNRFJeB5T";
+            $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
             $api = new Api($api_key, $api_secret);
             $validator = Validator::make($request->all(), [
                 'order_id' => 'required',

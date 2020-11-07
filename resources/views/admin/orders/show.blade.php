@@ -7,6 +7,8 @@
             <h4>
 
                 <small class="float-right">Date: {{$order->created_at}}</small>
+                <br>
+                <a href="{{route('admin.orders.printReceipt',$order->id)}}" class="float-right btn btn-outline-primary">Print Receipt</a>
             </h4>
         </div>
         <!-- /.col -->
@@ -56,20 +58,20 @@
                         <td>{{$orderDetail->quantity}}</td>
                         <td>Rs. {{$orderDetail->variable_selling_price}} </td>
                         <td>Rs. {{$orderDetail->quantity*$orderDetail->variable_selling_price}} </td>
-                        @if($orderDetail->mirchiType!="none")
-                            <table class="table table-striped ml-5">
+                        @if(count($orderDetail->customProductDetails)>0)
+                            <table class="table ml-5 p-0 w-75">
                                 <thead>
                                 <tr>
-                                    <th>Ingradient Name </th>
-                                    <th>Ingradient Qty</th>
+                                    <th class="p-0">Masala Ingradient Name </th>
+                                    <th class="p-0">Masala Ingradient Qty</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 @foreach($orderDetail->customProductDetails as $key=>$customDetails)
                                     <tr>
-                                        <td>{{$customDetails->ingradient->name }}</td>
-                                        <td>{{$customDetails->required_qty}}</td>
+                                        <td class="p-0">{{$customDetails->ingradient->name }}</td>
+                                        <td class="p-0">{{$customDetails->required_qty}}</td>
 
                                     </tr>
                                     @endforeach
@@ -86,7 +88,7 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-
+<hr>
     <div class="row">
         <!-- accepted payments column -->
         <div class="col-6">
