@@ -23,7 +23,12 @@ class StoreYadiProductRequest extends FormRequest
                 'mimes:jpeg,bmp,png,jpg',
                 'file',
                 'max:1024'
+            ],'hindiText'=>[
+                'required'
             ],
+            'marathiText'=>[
+                'required'
+            ]
         ];
     }
 }

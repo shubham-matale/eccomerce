@@ -6,6 +6,7 @@ use App\CustomProductVariable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreYadiProductRequest;
 use App\Http\Requests\UpdateYadiProductRequest;
+use App\LanguageTranslation;
 use App\MasalaIngradients;
 use Illuminate\Http\Request;
 use App\Http\Requests\MassDestroyProductRequest;
@@ -47,6 +48,24 @@ class CustomizedProductController extends Controller{
         $product->description=$request->description;
         $product->save();
 
+        $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
+
         return redirect()->route('admin.yadiProducts.index');
     }
 
@@ -55,7 +74,8 @@ class CustomizedProductController extends Controller{
         abort_unless(\Gate::allows('product_edit'), 403);
         $product=Product::find($id);
         $productSubCategory=ProductSubCategory::all();
-        return view('admin.yadiProducts.edit', compact(['product','productSubCategory']));
+        $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
+        return view('admin.yadiProducts.edit', compact(['product','productSubCategory','languageData']));
     }
 
     public function update(UpdateYadiProductRequest $request, $id)
@@ -69,7 +89,23 @@ class CustomizedProductController extends Controller{
         $product->description=$request->description;
 
         $product->save();
-
+        $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
 
         return redirect()->route('admin.yadiProducts.index');
     }

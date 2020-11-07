@@ -17,7 +17,12 @@ class UpdateYadiProductRequest extends FormRequest
         return [
             'name' => [
                 'required',
+            ],'hindiText'=>[
+                'required'
             ],
+            'marathiText'=>[
+                'required'
+            ]
 
         ];
     }
