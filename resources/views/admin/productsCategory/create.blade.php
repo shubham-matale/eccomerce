@@ -35,7 +35,7 @@
                     </p>
                 </div>
                 <div class="form-group col-md-3 {{ $errors->has('marathiText') ? 'has-error' : '' }}">
-                    <label for="marathiText">Hindi Text*</label>
+                    <label for="marathiText">Marathi Text*</label>
                     <input type="text" id="marathiText" name="marathiText" class="form-control" value="{{ old('marathiText', isset($languageData) ? $languageData->marathiText : '') }}">
                     @if($errors->has('marathiText'))
                         <p class="help-block">
