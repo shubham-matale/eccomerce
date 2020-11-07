@@ -15,10 +15,54 @@ class OrderController extends Controller
     public function index()
     {
         abort_unless(\Gate::allows('view_order'), 403);
-        $orders = Order::with(['couponDetails','customer','deliveryBoy'])->orderBy('id','DESC')->get();
+        $orders = Order::with(['couponDetails','customer','deliveryBoy'])
+            ->where('payment_status','=','paid')
+            ->where('order_status_id','=',2)
+            ->orderBy('id','DESC')
+            ->limit(500)
+            ->get();
 
         return view('admin.orders.index', compact('orders'));
     }
+
+    public function inProcess()
+    {
+        abort_unless(\Gate::allows('view_order'), 403);
+        $orders = Order::with(['couponDetails','customer','deliveryBoy'])
+            ->where('payment_status','=','paid')
+            ->where('order_status_id','=',3)
+            ->orderBy('id','DESC')
+            ->limit(500)
+            ->get();
+
+        return view('admin.orders.inprocess', compact('orders'));
+    }
+    public function delivered()
+    {
+        abort_unless(\Gate::allows('view_order'), 403);
+        $orders = Order::with(['couponDetails','customer','deliveryBoy'])
+            ->where('payment_status','=','paid')
+            ->where('order_status_id','=',4)
+            ->orderBy('id','DESC')
+            ->limit(500)
+            ->get();
+
+        return view('admin.orders.delivered', compact('orders'));
+    }
+    public function paymentPending()
+    {
+        abort_unless(\Gate::allows('view_order'), 403);
+        $orders = Order::with(['couponDetails','customer','deliveryBoy'])
+            ->where('payment_status','=','unpaid')
+            ->where('order_status_id','=',1)
+            ->orderBy('id','DESC')
+            ->limit(500)
+            ->get();
+
+        return view('admin.orders.paymentPending', compact('orders'));
+    }
+
+
 
 
     public function create()

@@ -10,18 +10,10 @@
         <div class="card card-primary card-tabs">
             <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+
                     <li class="nav-item">
-                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="false">New Orders</a>
+                        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Unpaid Orders</a>
                     </li>
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">In Delivery Process</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link " id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="true">Delivered</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Unpaid Orders</a>--}}
-{{--                    </li>--}}
                 </ul>
             </div>
             <div class="card-body">
@@ -89,7 +81,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($orders as $key => $order)
-                                    @if($order->payment_status=='paid' && $order->order_status_id==2)
+                                    @if($order->payment_status=='unpaid' && $order->order_status_id==1)
                                         <tr>
                                             <td></td>
                                             <td>{{$order->Invoice_No}}</td>

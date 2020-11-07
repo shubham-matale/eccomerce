@@ -10,18 +10,11 @@
         <div class="card card-primary card-tabs">
             <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+
                     <li class="nav-item">
-                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="false">New Orders</a>
+                        <a class="nav-link " id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="true">Delivered</a>
                     </li>
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">In Delivery Process</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link " id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="true">Delivered</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Unpaid Orders</a>--}}
-{{--                    </li>--}}
+
                 </ul>
             </div>
             <div class="card-body">
@@ -42,10 +35,10 @@
                     </tbody>
                 </table>
                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                    <div class="tab-pane fade active show" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                        <div class="table-responsive">
 
-                            <table class=" table table-bordered table-striped table-hover datatable" id="orderTable">
+
+                        <div class="table-responsive">
+                            <table class=" table table-bordered table-striped table-hover datatable">
                                 <thead>
                                 <tr>
                                     <th width="10">
@@ -89,7 +82,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($orders as $key => $order)
-                                    @if($order->payment_status=='paid' && $order->order_status_id==2)
+                                    @if($order->payment_status=='paid' && $order->order_status_id==4)
                                         <tr>
                                             <td></td>
                                             <td>{{$order->Invoice_No}}</td>
@@ -101,7 +94,7 @@
                                             <td>{{$order->total_amount}}</td>
                                             <th>{{$order->customer->name}}</th>
                                             <th ><span class="badge badge-success">{{$order->couponDetails!==null?$order->couponDetails->code:''}}</span></th>
-                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('m/d/Y')}}</td>
+                                            <td>{{$order->created_at}}</td>
                                             <td>
                                                 <a class="btn btn-xs btn-primary" href="{{ route('admin.orders.show', $order->id) }}">
                                                     {{ trans('global.view') }}
@@ -114,7 +107,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+
 
                 </div>
             </div>

@@ -46,7 +46,7 @@
                                 {{ $product->name ?? '' }}
                             </td>
                             <td>
-                                {{ $product->description ?? '' }}
+                                {{ Str::limit($product->description, 50) ?? '' }}
                             </td>
                             <td>
                                 <a href="{{ $product->product_image_url ?? '#' }}" target="_blank">{{ $product->product_image_url ?? '' }}</a>

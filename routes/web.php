@@ -78,7 +78,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Orders
 
     Route::resource('orders', 'OrderController');
-
+    Route::get('order/inProcess', 'OrderController@inProcess')->name('order.inProcess');
+    Route::get('order/delivered', 'OrderController@delivered')->name('order.delivered');
+    Route::get('order/paymentPending', 'OrderController@paymentPending')->name('order.paymentPending');
     Route::post('orders/assignDeliveryBoy/{id}', 'OrderController@assignDeliveryBoy')->name('orders.assignDeliveryBoy');
     Route::get('orders/printReceipt/{id}', 'OrderController@printReceipt')->name('orders.printReceipt');
 
