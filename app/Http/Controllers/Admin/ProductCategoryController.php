@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
+use App\LanguageTranslation;
 use App\ProductCategory;
 
 class ProductCategoryController extends Controller
@@ -35,6 +36,24 @@ class ProductCategoryController extends Controller
         $productCategory->is_active=$request->input('is_active','');
         $productCategory->save();
 
+        $languageData = LanguageTranslation::where('englishText','=',$request->product_category_name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
+
         return redirect()->route('admin.productsCategory.index');
     }
 
@@ -42,7 +61,8 @@ class ProductCategoryController extends Controller
     {
         abort_unless(\Gate::allows('update_product_category'), 403);
         $productCategory=ProductCategory::find($id);
-        return view('admin.productsCategory.edit', compact('productCategory'));
+        $languageData = LanguageTranslation::where('englishText','=',$productCategory->product_category_name)->first();
+        return view('admin.productsCategory.edit', compact(['productCategory','languageData']));
     }
 
     public function update(UpdateProductCategoryRequest $request, $id)
@@ -58,6 +78,23 @@ class ProductCategoryController extends Controller
         $productCategory->is_active=$request->input('is_active','');
 
         $productCategory->save();
+        $languageData = LanguageTranslation::where('englishText','=',$request->product_category_name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
         return redirect()->route('admin.productsCategory.index');
     }
 

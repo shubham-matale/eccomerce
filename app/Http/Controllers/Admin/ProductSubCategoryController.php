@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductSubCategoryRequest;
 use App\Http\Requests\UpdateProductSubCategoryRequest;
+use App\LanguageTranslation;
 use App\ProductSubCategory;
 use App\ProductCategory;
 
@@ -39,6 +40,24 @@ class ProductSubCategoryController extends Controller
         $productSubCategory->is_active=$request->input('is_active','');
         $productSubCategory->save();
 
+        $languageData = LanguageTranslation::where('englishText','=',$request->product_subcategory_name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
+
         return redirect()->route('admin.productsSubCategory.index');
     }
 
@@ -47,7 +66,8 @@ class ProductSubCategoryController extends Controller
         abort_unless(\Gate::allows('update_product_category'), 403);
         $productSubCategory=ProductSubCategory::find($id);
         $productCategory=ProductCategory::get();
-        return view('admin.productsSubCategory.edit', compact(['productSubCategory','productCategory']));
+        $languageData = LanguageTranslation::where('englishText','=',$productSubCategory->product_subcategory_name)->first();
+        return view('admin.productsSubCategory.edit', compact(['productSubCategory','productCategory','languageData']));
     }
 
     public function update(UpdateProductSubCategoryRequest $request, $id)
@@ -64,6 +84,24 @@ class ProductSubCategoryController extends Controller
         $productSubCategory->product_category_id=$request->input('product_category_id','');
         $productSubCategory->is_active=$request->input('is_active','');
         $productSubCategory->save();
+
+        $languageData = LanguageTranslation::where('englishText','=',$request->product_subcategory_name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
         return redirect()->route('admin.productsSubCategory.index');
     }
 
