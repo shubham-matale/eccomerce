@@ -27,6 +27,12 @@ class UpdateProductRequest extends FormRequest
             'file',
             'max:1024'
             ],
+            'hindiText'=>[
+                'required'
+            ],
+            'marathiText'=>[
+                'required'
+            ]
         ];
     }
 }

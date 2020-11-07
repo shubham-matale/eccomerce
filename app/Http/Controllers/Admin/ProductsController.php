@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\LanguageTranslation;
 use Illuminate\Http\Request;
 use App\Http\Requests\MassDestroyProductRequest;
 use App\Http\Requests\StoreProductRequest;
@@ -48,6 +49,25 @@ class ProductsController extends Controller
         $product->product_subcategory_id=$request->product_subcategory_id;
         $product->save();
 
+        $languageData = LanguageTranslation::where('englishText','=',$request->name)->first();
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }
+
+
         return redirect()->route('admin.products.index');
     }
 
@@ -55,7 +75,8 @@ class ProductsController extends Controller
     {
         abort_unless(\Gate::allows('product_edit'), 403);
         $productSubCategory=ProductSubCategory::all();
-        return view('admin.products.edit', compact(['product','productSubCategory']));
+        $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
+        return view('admin.products.edit', compact(['product','productSubCategory','languageData']));
     }
 
     public function update(UpdateProductRequest $request, Product $product)
@@ -71,6 +92,14 @@ class ProductsController extends Controller
         $product->product_subcategory_id=$request->product_subcategory_id;
         $product->save();
 
+        $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
+        if(strlen($languageData->originalText)<=0){
+            $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+        }
+        $languageData->englishText=$request->name;
+        $languageData->hindiText=$request->hindiText;
+        $languageData->marathiText=$request->marathiText;
+        $languageData->save();
 
         return redirect()->route('admin.products.index');
     }

@@ -19,6 +19,7 @@ class CreateLanguageTranslationsTable extends Migration
             $table->longText('englishText')->nullable();
             $table->longText('hindiText')->nullable();
             $table->longText('marathiText')->nullable();
+            $table->longText('originalText')->nullable();
         });
     }
 

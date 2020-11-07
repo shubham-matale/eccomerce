@@ -22,6 +22,30 @@
                         {{ trans('global.product.fields.name_helper') }}
                     </p>
                 </div>
+                <div class="form-group col-md-3 {{ $errors->has('hindiText') ? 'has-error' : '' }}">
+                    <label for="hindiText">Hindi Text*</label>
+                    <input type="text" id="hindiText" name="hindiText" class="form-control" value="{{ old('hindiText', isset($languageData) ? $languageData->hindiText : '') }}">
+                    @if($errors->has('hindiText'))
+                        <p class="help-block">
+                            {{ $errors->first('hindiText') }}
+                        </p>
+                    @endif
+                    <p class="helper-block">
+                        {{ trans('global.product.fields.name_helper') }}
+                    </p>
+                </div>
+                <div class="form-group col-md-3 {{ $errors->has('marathiText') ? 'has-error' : '' }}">
+                    <label for="marathiText">Hindi Text*</label>
+                    <input type="text" id="marathiText" name="marathiText" class="form-control" value="{{ old('marathiText', isset($languageData) ? $languageData->marathiText : '') }}">
+                    @if($errors->has('marathiText'))
+                        <p class="help-block">
+                            {{ $errors->first('marathiText') }}
+                        </p>
+                    @endif
+                    <p class="helper-block">
+                        {{ trans('global.product.fields.name_helper') }}
+                    </p>
+                </div>
                 <div class="form-group col-md-3">
                     <label>Product Sub Category*</label>
                     <select class="form-control" name="product_subcategory_id" id="product_subcategory_id" value="{{ old('is_active', isset($product) ? $product->product_subcategory_id : 1) }}">
