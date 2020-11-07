@@ -26,19 +26,19 @@ class LanguageController extends Controller
 // Modify custom payload here
         $msg = array
         (
-            "body"=>"Cool offers. Get them before expiring!",
-        "title"=> "Flat 80% discount"
+            "body"=>"New Order Received On Shree Kakaji Masale App",
+        "title"=> "New Order Received"
 
         );
         $fields = array
         (
-            'to'      => "/topics/all",
-            'data'                  => $msg
+            'to'      => "/topics/NewOrderNotification",
+            'notification'                  => $msg
         );
 
         $headers = array
         (
-            'Authorization: key=' . API_ACCESS_KEY, 
+            'Authorization: key=' . API_ACCESS_KEY,
             'Content-Type: application/json'
         );
 
@@ -58,7 +58,13 @@ class LanguageController extends Controller
         $english=[];
         $hindi=[];
         $marathi=[];
+        $english_2=[];
+        $hindi_2=[];
+        $marathi_2=[];
         foreach($languageData as $key=>$eachLanguage){
+            $english_2[$eachLanguage['originalText']]=$eachLanguage['englishText'];
+            $hindi_2[$eachLanguage['originalText']]=$eachLanguage['hindiText'];
+            $marathi_2[$eachLanguage['originalText']]=$eachLanguage['marathiText'];
             $english[$eachLanguage['englishText']]=$eachLanguage['englishText'];
             $hindi[$eachLanguage['englishText']]=$eachLanguage['hindiText'];
             $marathi[$eachLanguage['englishText']]=$eachLanguage['marathiText'];
@@ -78,6 +84,23 @@ class LanguageController extends Controller
 
         $data = json_encode($hindi,JSON_UNESCAPED_UNICODE);
         $file = 'hindi_file.json';
+        $destinationPath=public_path()."/language/json/";
+        File::put($destinationPath.$file,$data);
+
+        $data = json_encode($marathi_2,JSON_UNESCAPED_UNICODE);
+        $file = 'marathi_file_2.json';
+        $destinationPath=public_path()."/language/json/";
+        File::put($destinationPath.$file,$data);
+
+
+        $data = json_encode($english_2,JSON_UNESCAPED_UNICODE);
+        $file = 'english_file_2.json';
+        $destinationPath=public_path()."/language/json/";
+        File::put($destinationPath.$file,$data);
+
+
+        $data = json_encode($hindi_2,JSON_UNESCAPED_UNICODE);
+        $file = 'hindi_file_2.json';
         $destinationPath=public_path()."/language/json/";
         File::put($destinationPath.$file,$data);
 

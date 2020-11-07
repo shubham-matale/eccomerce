@@ -93,13 +93,22 @@ class ProductsController extends Controller
         $product->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
-        if(strlen($languageData->originalText)<=0){
+        if($languageData){
+            if(strlen($languageData->originalText)<=0){
+                $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            }
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
+        }else{
+            $languageData = new LanguageTranslation;
             $languageData->originalText=strtolower(str_replace(' ', '_', $request->name));
+            $languageData->englishText=$request->name;
+            $languageData->hindiText=$request->hindiText;
+            $languageData->marathiText=$request->marathiText;
+            $languageData->save();
         }
-        $languageData->englishText=$request->name;
-        $languageData->hindiText=$request->hindiText;
-        $languageData->marathiText=$request->marathiText;
-        $languageData->save();
 
         return redirect()->route('admin.products.index');
     }
