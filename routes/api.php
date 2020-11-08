@@ -20,7 +20,7 @@ Route::group(['prefix' => 'v1', 'as' => 'admin.', 'namespace' => 'Api\V1\Admin']
 //    Route::apiResource('products', 'ProductsApiController');
 });
 
-Route::group(['prefix' => 'v1', 'as' => 'users.', 'namespace' => 'Api\V1\User'], function () {
+Route::group(['middleware'=>'cors','prefix' => 'v1', 'as' => 'users.', 'namespace' => 'Api\V1\User'], function () {
     Route::apiResource('productCategory','ProductCategoryController');
     Route::apiResource('products', 'ProductsApiController');
 
