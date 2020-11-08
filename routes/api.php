@@ -57,3 +57,5 @@ Route::group(['middleware'=>'cors','prefix' => 'v1', 'as' => 'users.', 'namespac
 
 
 });
+
+Route::get('/dashboardData','Admin\HomeController@dashboardData')->name('dashboard.data');

@@ -3,15 +3,15 @@
 // Route::redirect('/', '/login');
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('cache:clear');
-    $exitCode = Artisan::call('optimize');
-    $exitCode = Artisan::call('route:cache');
-    $exitCode = Artisan::call('route:clear');
-    $exitCode = Artisan::call('view:clear');
-    $exitCode = Artisan::call('config:cache');
-    return '<h1>Cache facade value cleared</h1>';
-});
+//Route::get('/clear-cache', function() {
+//    $exitCode = Artisan::call('cache:clear');
+//    $exitCode = Artisan::call('optimize');
+//    $exitCode = Artisan::call('route:cache');
+//    $exitCode = Artisan::call('route:clear');
+//    $exitCode = Artisan::call('view:clear');
+//    $exitCode = Artisan::call('config:cache');
+//    return '<h1>Cache facade value cleared</h1>';
+//});
 
 Auth::routes(['register' => false]);
 
@@ -114,6 +114,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('language', 'LanguageController');
     Route::get('download-jsonfile','LanguageController@CreateLanguagrTranslationFile')->name('file.download');
+
 
 //    Route::get('download-jsonfile', array('as'=> '', 'uses' => ''));
 
