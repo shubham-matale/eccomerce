@@ -29,6 +29,8 @@ class OrderController extends Controller{
 
     public $tax=5;
     public $rate_per_km=0.6;
+    public $api_key="rzp_test_rY0vOBNRFJeB5T";
+    public $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
 
     public function getRate(Request $request)
     {
@@ -277,9 +279,9 @@ class OrderController extends Controller{
 //                dd($response['total']*100);
                 if($orderSaveStatus){
 
-                    $api_key="rzp_test_rY0vOBNRFJeB5T";
-                    $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
-                    $api = new Api($api_key, $api_secret);
+//                    $api_key="rzp_test_rY0vOBNRFJeB5T";
+//                    $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
+                    $api = new Api($this->api_key, $this->api_secret);
 
 
 // Orders
@@ -379,9 +381,8 @@ class OrderController extends Controller{
 //            $api_key=env('RAZOR_PAY_TEST_KEY');
 //            $api_secret=env('RAZOR_PAY_TEST_SECRETE');
 
-            $api_key="rzp_test_rY0vOBNRFJeB5T";
-            $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
-            $api = new Api($api_key, $api_secret);
+
+            $api = new Api($this->api_key, $this->api_secret);
             $validator = Validator::make($request->all(), [
                 'order_id' => 'required',
                 'razorpay_order_id'=>'required'
