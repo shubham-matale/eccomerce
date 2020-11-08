@@ -224,6 +224,16 @@
                     </li>
                 @endcan
                 <li class="nav-item">
+                    <a href="{{ route("admin.language.index") }}" class="nav-link {{ request()->is('admin/language') || request()->is('admin/language/*') ? 'active' : '' }}">
+                        <i class="fa fa-gift">
+
+                        </i>
+                        <p>
+                            <span>Language Translation</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
 
                             <i class="fa fa-sign-out">

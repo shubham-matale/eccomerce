@@ -112,7 +112,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('tickets/getMessage/{id}','TicketsController@getMessage')->name('tickets.getMessage');
 
-
+    Route::resource('language', 'LanguageController');
     Route::get('download-jsonfile','LanguageController@CreateLanguagrTranslationFile')->name('file.download');
 
 //    Route::get('download-jsonfile', array('as'=> '', 'uses' => ''));

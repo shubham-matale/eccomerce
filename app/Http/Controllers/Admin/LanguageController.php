@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use File;
 use App\LanguageTranslation;
+use App\Http\Requests\StoreLanguageRequest;
 class LanguageController extends Controller
 {
     public function downloadJSONFile(){
@@ -24,35 +25,7 @@ class LanguageController extends Controller
 
 
 // Modify custom payload here
-        $msg = array
-        (
-            "body"=>"New Order Received On Shree Kakaji Masale App",
-        "title"=> "New Order Received"
 
-        );
-        $fields = array
-        (
-            'to'      => "/topics/NewOrderNotification",
-            'notification'                  => $msg
-        );
-
-        $headers = array
-        (
-            'Authorization: key=' . API_ACCESS_KEY,
-            'Content-Type: application/json'
-        );
-
-        $ch = curl_init();
-        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' ); //For firebase, use https://fcm.googleapis.com/fcm/send
-
-        curl_setopt( $ch,CURLOPT_POST, true );
-        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-        $result = curl_exec($ch );
-        curl_close( $ch );
-        print_r($result);
 
         $languageData = LanguageTranslation::all();
         $english=[];
@@ -69,6 +42,8 @@ class LanguageController extends Controller
             $hindi[$eachLanguage['englishText']]=$eachLanguage['hindiText'];
             $marathi[$eachLanguage['englishText']]=$eachLanguage['marathiText'];
         }
+
+        dd($english_2);
 
         $data = json_encode($marathi,JSON_UNESCAPED_UNICODE);
         $file = 'marathi_file.json';
@@ -104,6 +79,100 @@ class LanguageController extends Controller
         $destinationPath=public_path()."/language/json/";
         File::put($destinationPath.$file,$data);
 
+        return redirect()->route('admin.language.index');
+    }
 
+    public function index()
+    {
+        $languageData=LanguageTranslation::all();
+
+        return view('admin.language.index',compact(['languageData']));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $languageData = new LanguageTranslation;
+        return view('admin.language.create', compact(['languageData']));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreLanguageRequest $request)
+    {
+        $languageData = new LanguageTranslation;
+        $languageData->originalText=strtolower(str_replace(' ', '_', $request->englishText));
+        $languageData->englishText=$request->englishText;
+        $languageData->hindiText=$request->hindiText;
+        $languageData->marathiText=$request->marathiText;
+        $languageData->save();
+
+        return redirect()->route('admin.language.index');
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\LanguageTranslation  $languageTranslation
+     * @return \Illuminate\Http\Response
+     */
+    public function show(LanguageTranslation $languageTranslation)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\LanguageTranslation  $languageTranslation
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($languageTranslation)
+    {
+
+        $languageData = LanguageTranslation::find($languageTranslation);
+        return view('admin.language.edit', compact(['languageData']));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\LanguageTranslation  $languageTranslation
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $languageTranslation)
+    {
+
+        $languageData = LanguageTranslation::find($languageTranslation);
+        $languageData->englishText=$request->englishText;
+        $languageData->hindiText=$request->hindiText;
+        $languageData->marathiText=$request->marathiText;
+        $languageData->save();
+
+        return redirect()->route('admin.language.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\LanguageTranslation  $languageTranslation
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $languageData = LanguageTranslation::find($id);
+        $languageData->delete();
+
+        return redirect()->route('admin.language.index');
     }
 }
