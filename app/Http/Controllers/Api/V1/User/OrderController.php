@@ -29,8 +29,9 @@ class OrderController extends Controller{
 
     public $tax=5;
     public $rate_per_km=0.6;
-    public $api_key="rzp_test_rY0vOBNRFJeB5T";
-    public $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
+    public $api_key="rzp_live_Hxh29roCoMrCju";
+    public $api_secret="LYSno2eKgiP2Vv6XYVsnOgsE";
+
 
     public function getRate(Request $request)
     {
