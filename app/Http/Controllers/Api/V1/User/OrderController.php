@@ -377,6 +377,7 @@ class OrderController extends Controller{
     }
 
     public function checkPaymentStatus(Request $request){
+        define( 'API_ACCESS_KEY', 'AAAAn5pEcwU:APA91bHu-WVF70SFm9I7JRi4nSY-1IAwhHnxEfSLXxc-NJANFscBcfhxbfQwcu1n-6FZjnL7zXNu-1079KakSnXtySJAbcyZ9RtskNA3Hp2B_SUlnSsSciQKKdx8UKYb_TmFsOLC-xRj' ); // get API access key from Google/Firebase API's Console
         try {
 //            $api_key=env('RAZOR_PAY_TEST_KEY');
 //            $api_secret=env('RAZOR_PAY_TEST_SECRETE');
