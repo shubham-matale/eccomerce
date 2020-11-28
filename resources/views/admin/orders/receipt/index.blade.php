@@ -86,7 +86,24 @@
                         <td class="price">{{$orderDetail->quantity*$orderDetail->variable_selling_price}}</td>
                     </tr>
                 @endforeach
+                    <tr>
+                            <th >Subtotal:</th>
+                            <td>Rs. {{$order->sub_total}}</td>
+                        </tr>
+                        <tr>
+                            <th>Tax (5%)</th>
+                            <td>Rs. {{$order->tax}}</td>
+                        </tr>
+                        <tr>
+                            <th>Shipping Cost:</th>
+                            <td>Rs. {{$order->delivery_charge}}</td>
+                        </tr>
 
+
+                        <tr>
+                            <th>Total:</th>
+                            <td>Rs. {{$order->total_amount}}</td>
+                        </tr>
                 </tbody>
             </table>
             <p class="centered">Thanks for your purchase!

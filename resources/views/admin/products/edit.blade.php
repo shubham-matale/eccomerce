@@ -47,6 +47,18 @@
                         {{ trans('global.product.fields.name_helper') }}
                     </p>
                 </div>
+                <div class="form-group col-md-3 {{ $errors->has('gst_percentage') ? 'has-error' : '' }}">
+                    <label for="gst_percentage">GST Percentage*</label>
+                    <input type="number" id="gst_percentage" name="gst_percentage" class="form-control" value="{{ old('marathiText', isset($product) ? $product->gst_percentage : 5) }}">
+                    @if($errors->has('gst_percentage'))
+                        <p class="help-block">
+                            {{ $errors->first('gst_percentage') }}
+                        </p>
+                    @endif
+                    <p class="helper-block">
+                        {{ trans('global.product.fields.name_helper') }}
+                    </p>
+                </div>
                 <div class="form-group col-md-3">
                     <label>Product Sub Category</label>
                     <select class="form-control" name="product_subcategory_id" id="product_subcategory_id" value="{{ old('is_active', isset($product) ? $product->product_subcategory_id : 1) }}">

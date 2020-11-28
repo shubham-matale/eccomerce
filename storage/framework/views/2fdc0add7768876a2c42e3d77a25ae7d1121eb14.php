@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title>{{ trans('global.site_title') }}</title>
+    <title><?php echo e(trans('global.site_title')); ?></title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
@@ -19,9 +19,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
-    <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
-    @yield('styles')
+    <link href="<?php echo e(asset('css/adminltev3.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('css/custom.css')); ?>" rel="stylesheet" />
+    <?php echo $__env->yieldContent('styles'); ?>
 </head>
 
 <body class="sidebar-mini sidebar-open" style="height: auto;">
@@ -35,28 +35,29 @@
             </ul>
 
             <!-- Right navbar links -->
-            @if(count(config('panel.available_languages', [])) > 1)
+            <?php if(count(config('panel.available_languages', [])) > 1): ?>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
-                            {{ strtoupper(app()->getLocale()) }}
+                            <?php echo e(strtoupper(app()->getLocale())); ?>
+
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            @foreach(config('panel.available_languages') as $langLocale => $langName)
-                                <a class="dropdown-item" href="{{ url()->current() }}?change_language={{ $langLocale }}">{{ strtoupper($langLocale) }} ({{ $langName }})</a>
-                            @endforeach
+                            <?php $__currentLoopData = config('panel.available_languages'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $langLocale => $langName): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a class="dropdown-item" href="<?php echo e(url()->current()); ?>?change_language=<?php echo e($langLocale); ?>"><?php echo e(strtoupper($langLocale)); ?> (<?php echo e($langName); ?>)</a>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </li>
                 </ul>
-            @endif
+            <?php endif; ?>
 
         </nav>
 
-        @include('partials.menu')
+        <?php echo $__env->make('partials.menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <div class="content-wrapper" style="min-height: 917px;">
             <!-- Main content -->
             <section class="content" style="padding-top: 20px">
-                @yield('content')
+                <?php echo $__env->yieldContent('content'); ?>
             </section>
             <!-- /.content -->
         </div>
@@ -65,10 +66,12 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.0.0-alpha
             </div>
-            <strong> &copy;</strong> {{ trans('global.allRightsReserved') }}
+            <strong> &copy;</strong> <?php echo e(trans('global.allRightsReserved')); ?>
+
         </footer>
-        <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
+        <form id="logoutform" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+            <?php echo e(csrf_field()); ?>
+
         </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -92,18 +95,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="<?php echo e(asset('js/main.js')); ?>"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <script>
         $(function() {
-  let copyButtonTrans = '{{ trans('global.datatables.copy') }}'
-  let csvButtonTrans = '{{ trans('global.datatables.csv') }}'
-  let excelButtonTrans = '{{ trans('global.datatables.excel') }}'
-  let pdfButtonTrans = '{{ trans('global.datatables.pdf') }}'
-  let printButtonTrans = '{{ trans('global.datatables.print') }}'
-  let colvisButtonTrans = '{{ trans('global.datatables.colvis') }}'
+  let copyButtonTrans = '<?php echo e(trans('global.datatables.copy')); ?>'
+  let csvButtonTrans = '<?php echo e(trans('global.datatables.csv')); ?>'
+  let excelButtonTrans = '<?php echo e(trans('global.datatables.excel')); ?>'
+  let pdfButtonTrans = '<?php echo e(trans('global.datatables.pdf')); ?>'
+  let printButtonTrans = '<?php echo e(trans('global.datatables.print')); ?>'
+  let colvisButtonTrans = '<?php echo e(trans('global.datatables.colvis')); ?>'
 
   let languages = {
     'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'
@@ -112,7 +115,8 @@
   $.extend(true, $.fn.dataTable.Buttons.defaults.dom.button, { className: 'btn' })
   $.extend(true, $.fn.dataTable.defaults, {
     language: {
-      url: languages.{{ app()->getLocale() }}
+      url: languages.<?php echo e(app()->getLocale()); ?>
+
     },
     lengthMenu: [[10, 25, 50, 250, -1], [10, 25, 50, 250, "All"]],
     columnDefs: [{
@@ -244,7 +248,7 @@
 //     iDisplayLength: -1
 // });
     </script>
-    @yield('scripts')
+    <?php echo $__env->yieldContent('scripts'); ?>
     <script>
         /*!
      * AdminLTE v3.0.0-alpha.2 (https://adminlte.io)
@@ -258,3 +262,4 @@
 </body>
 
 </html>
+<?php /**PATH C:\xampp7.3\htdocs\Ecommerce\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

@@ -79,6 +79,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::resource('products', 'ProductsController');
 
+    Route::resource('masalaIngradients', 'MasalaIngradientsController');
+
 
     //banner
     Route::resource('banners', 'BannersController');
@@ -117,7 +119,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 
 //    Route::get('download-jsonfile', array('as'=> '', 'uses' => ''));
+    Route::get('changePassword','HomeController@showChangePasswordForm')->name('changePasswordForm');
 
+    Route::post('changePassword','HomeController@changePassword')->name('changePassword');
 });
 
 Route::redirect('/home', 'admin/');

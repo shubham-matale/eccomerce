@@ -54,6 +54,20 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="form-group col-md-3 {{ $errors->has('gst_percentage') ? 'has-error' : '' }}">
+                    <label for="gst_percentage">GST Percentage*</label>
+                    <input type="number" id="gst_percentage" name="gst_percentage" class="form-control" value="{{ old('marathiText', isset($product) ? $product->gst_percentage : 5) }}">
+                    @if($errors->has('gst_percentage'))
+                        <p class="help-block">
+                            {{ $errors->first('gst_percentage') }}
+                        </p>
+                    @endif
+                    <p class="helper-block">
+                        {{ trans('global.product.fields.name_helper') }}
+                    </p>
+                </div>
+
+
 
                 <div class="form-group col-md-3 {{ $errors->has('product_image_url') ? 'has-error' : '' }}">
                     <label for="product_image_url">Product Image </label>

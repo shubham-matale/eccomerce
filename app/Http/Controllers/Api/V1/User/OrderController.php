@@ -27,7 +27,7 @@ use PDF;
 
 class OrderController extends Controller{
 
-    public $tax=5;
+    public $tax=0;
     public $rate_per_km=0.6;
     public $api_key="rzp_test_rY0vOBNRFJeB5T";
     public $api_secret="k7cLsdpjeVgOScaSy9iT21qc";
@@ -60,22 +60,59 @@ class OrderController extends Controller{
                 foreach($allProductsInCart as $key=>$eachProduct){
                     $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
-                        $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
-                        $response['product_total_weight']=round($response['product_total_weight']+($eachProduct['productQuantity']*$product->product_variable_option_size), 2);
-                        if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1){
-                            switch ($eachProduct['customiseProductTypeOfMirchi']) {
-                                case "Medium Mirchi":
-                                    $response['sub_total']=$response['sub_total']+($product['medium_mirchi_price']*$eachProduct['productQuantity']);
-                                    break;
-                                case "Spicy Mirchi":
-                                    $response['sub_total']=$response['sub_total']+($product['spicy_mirchi_price']*$eachProduct['productQuantity']);
-                                    break;
-                                case "Mirchi":
-                                    $response['sub_total']=$response['sub_total']+($product['less_mirchi_price']*$eachProduct['productQuantity']);
-                                    break;
+                        if($eachProduct['isCustomiseProduct']==1 && $eachProduct['isIngredientCustomise']==1){
+                            $customizeIngradientPrice = 0;
+                            $customizeIngradientWeight = 0;
+
+                            foreach($eachProduct['ingredients'] as $key=>$ingradient){
+
+                                $masalaIngradient = MasalaIngradients::find($ingradient['_id']);
+
+                                $customizeIngradientPrice =$customizeIngradientPrice + (($masalaIngradient->price*$ingradient['customiseProductQuantity'])/1000);
+                                $customizeIngradientWeight = $customizeIngradientWeight+  $ingradient['customiseProductQuantity'];
+//                                echo $customizeIngradientPrice;
                             }
-                            $response['grinding_charge']=$response['grinding_charge']+($product['grinding_price']*$eachProduct['productQuantity']);
-                            $response['sub_total']=$response['sub_total']+$response['grinding_charge'];
+                            $customizeIngradientWeight = $customizeIngradientWeight/1000;
+                            $response['sub_total']=$response['sub_total']+$customizeIngradientPrice;
+                            $response['product_total_weight']=round($response['product_total_weight']+($customizeIngradientWeight), 2);
+                            if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1) {
+                                switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                    case "Medium Mirchi":
+                                        $response['sub_total'] = $response['sub_total'] + ($product['medium_mirchi_price'] * $eachProduct['productQuantity']);
+                                        break;
+                                    case "Spicy Mirchi":
+                                        $response['sub_total'] = $response['sub_total'] + ($product['spicy_mirchi_price'] * $eachProduct['productQuantity']);
+                                        break;
+                                    case "Mirchi":
+                                        $response['sub_total'] = $response['sub_total'] + ($product['less_mirchi_price'] * $eachProduct['productQuantity']);
+                                        break;
+                                }
+                                if($eachProduct['isGrinding']==1){
+                                    $response['grinding_charge'] = $response['grinding_charge'] + ($product['grinding_price'] * $eachProduct['productQuantity']);
+                                }
+
+                                $response['sub_total'] = $response['sub_total'] + $response['grinding_charge'];
+                            }
+                        }else{
+                            $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
+                            $response['product_total_weight']=round($response['product_total_weight']+($eachProduct['productQuantity']*$product->product_variable_option_size), 2);
+                            if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1){
+                                switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                    case "Medium Mirchi":
+                                        $response['sub_total']=$response['sub_total']+($product['medium_mirchi_price']*$eachProduct['productQuantity']);
+                                        break;
+                                    case "Spicy Mirchi":
+                                        $response['sub_total']=$response['sub_total']+($product['spicy_mirchi_price']*$eachProduct['productQuantity']);
+                                        break;
+                                    case "Mirchi":
+                                        $response['sub_total']=$response['sub_total']+($product['less_mirchi_price']*$eachProduct['productQuantity']);
+                                        break;
+                                }
+                                if($eachProduct['isGrinding']==1){
+                                    $response['grinding_charge'] = $response['grinding_charge'] + ($product['grinding_price'] * $eachProduct['productQuantity']);
+                                }
+                                $response['sub_total']=$response['sub_total']+$response['grinding_charge'];
+                            }
                         }
                     }
 
@@ -171,23 +208,59 @@ class OrderController extends Controller{
                 foreach($allProductsInCart as $key=>$eachProduct){
                     $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                     if($product!=null){
-                        $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
-                        $response['product_total_weight']=round($response['product_total_weight']+($eachProduct['productQuantity']*$product->product_variable_option_size), 2);
-                        if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1){
-                            switch ($eachProduct['customiseProductTypeOfMirchi']) {
-                                case "Medium Mirchi":
-                                    $response['sub_total']=$response['sub_total']+($product['medium_mirchi_price']*$eachProduct['productQuantity']);
-                                    break;
-                                case "Spicy Mirchi":
-                                    $response['sub_total']=$response['sub_total']+($product['spicy_mirchi_price']*$eachProduct['productQuantity']);
-                                    break;
-                                case "Mirchi":
-                                    $response['sub_total']=$response['sub_total']+($product['less_mirchi_price']*$eachProduct['productQuantity']);
-                                    break;
+                        if($eachProduct['isCustomiseProduct']==1 && $eachProduct['isIngredientCustomise']==1){
+                            $customizeIngradientPrice = 0;
+                            $customizeIngradientWeight = 0;
+
+                            foreach($eachProduct['ingredients'] as $key=>$ingradient){
+
+                                $masalaIngradient = MasalaIngradients::find($ingradient['_id']);
+                                $customizeIngradientPrice =$customizeIngradientPrice + (($masalaIngradient->price*$ingradient['customiseProductQuantity'])/1000);
+                                $customizeIngradientWeight = $customizeIngradientWeight+  $ingradient['customiseProductQuantity'];
                             }
-                            $response['grinding_charge']=$response['grinding_charge']+($product['grinding_price']*$eachProduct['productQuantity']);
-                            $response['sub_total']=$response['sub_total']+$response['grinding_charge'];
+                            $customizeIngradientWeight = $customizeIngradientWeight/1000;
+                            $response['sub_total']=$response['sub_total']+$customizeIngradientPrice;
+                            $response['product_total_weight']=round($response['product_total_weight']+($customizeIngradientWeight), 2);
+                            if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1) {
+                                switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                    case "Medium Mirchi":
+                                        $response['sub_total'] = $response['sub_total'] + ($product['medium_mirchi_price'] * $eachProduct['productQuantity']);
+                                        break;
+                                    case "Spicy Mirchi":
+                                        $response['sub_total'] = $response['sub_total'] + ($product['spicy_mirchi_price'] * $eachProduct['productQuantity']);
+                                        break;
+                                    case "Mirchi":
+                                        $response['sub_total'] = $response['sub_total'] + ($product['less_mirchi_price'] * $eachProduct['productQuantity']);
+                                        break;
+                                }
+
+                                if($eachProduct['isGrinding']==1){
+                                    $response['grinding_charge'] = $response['grinding_charge'] + ($product['grinding_price'] * $eachProduct['productQuantity']);
+                                }
+                                $response['sub_total'] = $response['sub_total'] + $response['grinding_charge'];
+                            }
+                        }else{
+                            $response['sub_total']=$response['sub_total']+($eachProduct['productQuantity']*$product->variable_selling_price);
+                            $response['product_total_weight']=round($response['product_total_weight']+($eachProduct['productQuantity']*$product->product_variable_option_size), 2);
+                            if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1){
+                                switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                    case "Medium Mirchi":
+                                        $response['sub_total']=$response['sub_total']+($product['medium_mirchi_price']*$eachProduct['productQuantity']);
+                                        break;
+                                    case "Spicy Mirchi":
+                                        $response['sub_total']=$response['sub_total']+($product['spicy_mirchi_price']*$eachProduct['productQuantity']);
+                                        break;
+                                    case "Mirchi":
+                                        $response['sub_total']=$response['sub_total']+($product['less_mirchi_price']*$eachProduct['productQuantity']);
+                                        break;
+                                }
+                                if($eachProduct['isGrinding']==1){
+                                    $response['grinding_charge'] = $response['grinding_charge'] + ($product['grinding_price'] * $eachProduct['productQuantity']);
+                                }
+                                $response['sub_total']=$response['sub_total']+$response['grinding_charge'];
+                            }
                         }
+
                     }
 
 

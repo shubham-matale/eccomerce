@@ -47,6 +47,7 @@ class ProductsController extends Controller
         $product->name=$request->name;
         $product->description=$request->description;
         $product->product_subcategory_id=$request->product_subcategory_id;
+        $product->gst_percentage=$request->gst_percentage;
         $product->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$request->name)->first();
@@ -90,6 +91,7 @@ class ProductsController extends Controller
         $product->name=$request->name;
         $product->description=$request->description;
         $product->product_subcategory_id=$request->product_subcategory_id;
+        $product->gst_percentage=$request->gst_percentage;
         $product->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();

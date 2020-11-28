@@ -12,70 +12,70 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route("admin.home") }}" class="nav-link">
+                    <a href="<?php echo e(route("admin.home")); ?>" class="nav-link">
 
                             <i class="fa fa-dashboard">
 
                             </i>
                         <p>
-                            <span>{{ trans('global.dashboard') }}</span>
+                            <span><?php echo e(trans('global.dashboard')); ?></span>
                         </p>
                     </a>
                 </li>
-                @can('user_management_access')
-                    <li class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user_management_access')): ?>
+                    <li class="nav-item has-treeview <?php echo e(request()->is('admin/permissions*') ? 'menu-open' : ''); ?> <?php echo e(request()->is('admin/roles*') ? 'menu-open' : ''); ?> <?php echo e(request()->is('admin/users*') ? 'menu-open' : ''); ?>">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-users">
 
                             </i>
                             <p>
-                                <span>{{ trans('global.userManagement.title') }}</span>
+                                <span><?php echo e(trans('global.userManagement.title')); ?></span>
                                 <i class="right fa fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @can('permission_access')
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('permission_access')): ?>
                                 <li class="nav-item ml-4">
-                                    <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
+                                    <a href="<?php echo e(route("admin.permissions.index")); ?>" class="nav-link <?php echo e(request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : ''); ?>">
                                         <i class="fa fa-unlock-alt">
 
                                         </i>
                                         <p>
-                                            <span>{{ trans('global.permission.title') }}</span>
+                                            <span><?php echo e(trans('global.permission.title')); ?></span>
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
-                            @can('role_access')
+                            <?php endif; ?>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('role_access')): ?>
                                 <li class="nav-item ml-4">
-                                    <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
+                                    <a href="<?php echo e(route("admin.roles.index")); ?>" class="nav-link <?php echo e(request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : ''); ?>">
                                         <i class="fa fa-briefcase">
 
                                         </i>
                                         <p>
-                                            <span>{{ trans('global.role.title') }}</span>
+                                            <span><?php echo e(trans('global.role.title')); ?></span>
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
-                            @can('user_access')
+                            <?php endif; ?>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user_access')): ?>
                                 <li class="nav-item ml-4">
-                                    <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
+                                    <a href="<?php echo e(route("admin.users.index")); ?>" class="nav-link <?php echo e(request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : ''); ?>">
                                         <i class="fa fa-user">
 
                                         </i>
                                         <p>
-                                            <span>{{ trans('global.user.title') }}</span>
+                                            <span><?php echo e(trans('global.user.title')); ?></span>
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
+                            <?php endif; ?>
                         </ul>
                     </li>
-                @endcan
-                @can('product_access')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('product_access')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.yadiProducts.index") }}" class="nav-link {{ request()->is('admin/yadiProducts') || request()->is('admin/yadiProducts/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.yadiProducts.index")); ?>" class="nav-link <?php echo e(request()->is('admin/yadiProducts') || request()->is('admin/yadiProducts/*') ? 'active' : ''); ?>">
                             <i class="fa fa-anchor">
 
                             </i>
@@ -84,10 +84,10 @@
                             </p>
                         </a>
                     </li>
-                @endcan
-                @can('product_access')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('product_access')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.masalaIngradients.index") }}" class="nav-link {{ request()->is('admin/masalaIngradients') || request()->is('admin/masalaIngradients/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.masalaIngradients.index")); ?>" class="nav-link <?php echo e(request()->is('admin/masalaIngradients') || request()->is('admin/masalaIngradients/*') ? 'active' : ''); ?>">
                             <i class="fa fa-product-hunt">
 
                             </i>
@@ -96,23 +96,23 @@
                             </p>
                         </a>
                     </li>
-                @endcan
+                <?php endif; ?>
 
-                @can('product_access')
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('product_access')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.products.index") }}" class="nav-link {{ request()->is('admin/products') || request()->is('admin/products/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.products.index")); ?>" class="nav-link <?php echo e(request()->is('admin/products') || request()->is('admin/products/*') ? 'active' : ''); ?>">
                             <i class="fa fa-product-hunt">
 
                             </i>
                             <p>
-                                <span>{{ trans('global.product.title') }}</span>
+                                <span><?php echo e(trans('global.product.title')); ?></span>
                             </p>
                         </a>
                     </li>
-                @endcan
-                @can('product_category_access')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('product_category_access')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.productsCategory.index") }}" class="nav-link {{ request()->is('admin/productsCategory') || request()->is('admin/productsCategory/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.productsCategory.index")); ?>" class="nav-link <?php echo e(request()->is('admin/productsCategory') || request()->is('admin/productsCategory/*') ? 'active' : ''); ?>">
                             <i class="fa fa-list">
 
                             </i>
@@ -121,10 +121,10 @@
                             </p>
                         </a>
                     </li>
-                @endcan
-                @can('product_subcategory_access')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('product_subcategory_access')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.productsSubCategory.index") }}" class="nav-link {{ request()->is('admin/productsSubCategory') || request()->is('admin/productsSubCategory/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.productsSubCategory.index")); ?>" class="nav-link <?php echo e(request()->is('admin/productsSubCategory') || request()->is('admin/productsSubCategory/*') ? 'active' : ''); ?>">
                             <i class="fa fa-list-alt">
 
                             </i>
@@ -133,10 +133,10 @@
                             </p>
                         </a>
                     </li>
-                @endcan
-                @can('view_banner')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('view_banner')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.banners.index") }}" class="nav-link {{ request()->is('admin/banners') || request()->is('admin/banners/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.banners.index")); ?>" class="nav-link <?php echo e(request()->is('admin/banners') || request()->is('admin/banners/*') ? 'active' : ''); ?>">
                             <i class="fa fa-bandcamp">
 
                             </i>
@@ -145,19 +145,19 @@
                             </p>
                         </a>
                     </li>
-                @endcan
-                @can('view_order')
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{ route("admin.orders.index") }}" class="nav-link {{ request()->is('admin/orders') || request()->is('admin/orders/*') ? 'active' : '' }}">--}}
-{{--                            <i class="fa fa-eercast">--}}
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('view_order')): ?>
 
-{{--                            </i>--}}
-{{--                            <p>--}}
-{{--                                <span>All Orders</span>--}}
-{{--                            </p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-                    <li class="nav-item has-treeview {{ request()->is('admin/orders*') ? 'menu-open' : '' }}   {{ request()->is('admin/order*') ? 'menu-open' : '' }} {{ request()->is('admin/orders') || request()->is('admin/orders/*') ? 'active' : '' }}">
+
+
+
+
+
+
+
+
+
+                    <li class="nav-item has-treeview <?php echo e(request()->is('admin/orders*') ? 'menu-open' : ''); ?>   <?php echo e(request()->is('admin/order*') ? 'menu-open' : ''); ?> <?php echo e(request()->is('admin/orders') || request()->is('admin/orders/*') ? 'active' : ''); ?>">
                         <a class="nav-link nav-dropdown-toggle">
                             <i class="fa fa-eercast">
 
@@ -169,7 +169,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item ml-4">
-                                <a href="{{ route("admin.orders.index") }}" class="nav-link {{ request()->is('admin/orders') && request()->is('admin/orders') ? 'active' : '' }}">
+                                <a href="<?php echo e(route("admin.orders.index")); ?>" class="nav-link <?php echo e(request()->is('admin/orders') && request()->is('admin/orders') ? 'active' : ''); ?>">
                                     <i class="fa fa-bookmark-o">
 
                                     </i>
@@ -179,7 +179,7 @@
                                 </a>
                             </li>
                             <li class="nav-item ml-4">
-                                <a href="{{ route("admin.order.inProcess") }}" class="nav-link {{ request()->is('admin/order/inProcess') ? 'active' : '' }}">
+                                <a href="<?php echo e(route("admin.order.inProcess")); ?>" class="nav-link <?php echo e(request()->is('admin/order/inProcess') ? 'active' : ''); ?>">
                                     <i class="fa fa-bookmark">
 
                                     </i>
@@ -189,7 +189,7 @@
                                 </a>
                             </li>
                             <li class="nav-item ml-4">
-                                <a href="{{ route("admin.order.delivered") }}" class="nav-link {{   request()->is('admin/order/delivered') ? 'active' : '' }}">
+                                <a href="<?php echo e(route("admin.order.delivered")); ?>" class="nav-link <?php echo e(request()->is('admin/order/delivered') ? 'active' : ''); ?>">
                                     <i class="fa fa-truck">
 
                                     </i>
@@ -199,7 +199,7 @@
                                 </a>
                             </li>
                             <li class="nav-item ml-4">
-                                <a href="{{ route("admin.order.paymentPending") }}" class="nav-link {{ request()->is('admin/order/paymentPending') ? 'active' : '' }}">
+                                <a href="<?php echo e(route("admin.order.paymentPending")); ?>" class="nav-link <?php echo e(request()->is('admin/order/paymentPending') ? 'active' : ''); ?>">
                                     <i class="fa fa-money">
 
                                     </i>
@@ -211,10 +211,10 @@
 
                         </ul>
                     </li>
-                @endcan
-                @can('view_tickets')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('view_tickets')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.tickets.index") }}" class="nav-link {{ request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.tickets.index")); ?>" class="nav-link <?php echo e(request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'active' : ''); ?>">
                             <i class="fa fa-ticket">
 
                             </i>
@@ -223,10 +223,10 @@
                             </p>
                         </a>
                     </li>
-                @endcan
-                @can('access_coupon')
+                <?php endif; ?>
+                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('access_coupon')): ?>
                     <li class="nav-item">
-                        <a href="{{ route("admin.coupons.index") }}" class="nav-link {{ request()->is('admin/coupons') || request()->is('admin/coupons/*') ? 'active' : '' }}">
+                        <a href="<?php echo e(route("admin.coupons.index")); ?>" class="nav-link <?php echo e(request()->is('admin/coupons') || request()->is('admin/coupons/*') ? 'active' : ''); ?>">
                             <i class="fa fa-gift">
 
                             </i>
@@ -235,9 +235,9 @@
                             </p>
                         </a>
                     </li>
-                @endcan
+                <?php endif; ?>
                 <li class="nav-item">
-                    <a href="{{ route("admin.language.index") }}" class="nav-link {{ request()->is('admin/language') || request()->is('admin/language/*') ? 'active' : '' }}">
+                    <a href="<?php echo e(route("admin.language.index")); ?>" class="nav-link <?php echo e(request()->is('admin/language') || request()->is('admin/language/*') ? 'active' : ''); ?>">
                         <i class="fa fa-gift">
 
                         </i>
@@ -247,7 +247,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route("admin.changePasswordForm") }}" class="nav-link {{ request()->is('admin/changePasswordForm')  ? 'active' : '' }}">
+                    <a href="<?php echo e(route("admin.changePasswordForm")); ?>" class="nav-link <?php echo e(request()->is('admin/changePasswordForm')  ? 'active' : ''); ?>">
                         <i class="fa fa-gift">
 
                         </i>
@@ -263,7 +263,7 @@
 
                             </i>
                         <p>
-                            <span>{{ trans('global.logout') }}</span>
+                            <span><?php echo e(trans('global.logout')); ?></span>
                         </p>
                     </a>
                 </li>
@@ -274,3 +274,4 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+<?php /**PATH C:\xampp7.3\htdocs\Ecommerce\resources\views/partials/menu.blade.php ENDPATH**/ ?>
