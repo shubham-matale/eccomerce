@@ -12,7 +12,7 @@ use App\Http\Requests\StoreMasalaIngradientRequest;
 use App\Product;
 use App\ProductSubCategory;
 use App\ProductVariableOption;
-use App\masalaIngradients;
+use App\MasalaIngradients;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\ProductImage;
 use App\ProductVariable;
