@@ -366,11 +366,49 @@ class OrderController extends Controller{
                     foreach($allProductsInCart as $key=>$eachProduct){
                         $product=ProductVariable::with('product')->where('id','=',$eachProduct['productVariableId'])->first();
                         if($product!=null){
+                            $customizeIngradientPrice = 0;
+                            $customizeIngradientWeight = 0;
+                            $mirchiPrice = 0;
+                            if($eachProduct['isCustomiseProduct']==1 && $eachProduct['isIngredientCustomise']==1){
+
+
+                                foreach($eachProduct['ingredients'] as $key=>$ingradient){
+
+                                    $masalaIngradient = MasalaIngradients::find($ingradient['_id']);
+                                    $customizeIngradientPrice =$customizeIngradientPrice + (($masalaIngradient->price*$ingradient['customiseProductQuantity'])/1000);
+                                    $customizeIngradientWeight = $customizeIngradientWeight+  $ingradient['customiseProductQuantity'];
+                                }
+                                $customizeIngradientWeight = $customizeIngradientWeight/1000;
+                                if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)  && $eachProduct['isCustomiseProduct']==1) {
+                                    switch ($eachProduct['customiseProductTypeOfMirchi']) {
+                                        case "Medium Mirchi":
+                                            $mirchiPrice = $product['medium_mirchi_price'];
+
+                                            break;
+                                        case "Spicy Mirchi":
+                                            $mirchiPrice = $product['medium_mirchi_price'];
+                                            break;
+                                        case "Mirchi":
+                                            $mirchiPrice = $product['medium_mirchi_price'];
+                                            break;
+                                    }
+
+                                    if($eachProduct['isGrinding']==1){
+//                                        $response['grinding_charge'] = $response['grinding_charge'] + ($product['grinding_price'] * $eachProduct['productQuantity']);
+                                    }
+//                                    $response['sub_total'] = $response['sub_total'] + $response['grinding_charge'];
+                                }
+                            }
                             $orderDetails= new OrderDetails;
                             $orderDetails->order_id=$order->id;
                             $orderDetails->product_variable_id=$eachProduct['productVariableId'];
                             $orderDetails->quantity=$eachProduct['productQuantity'];
-                            $orderDetails->variable_selling_price=$product->variable_selling_price;
+                            if($eachProduct['isCustomiseProduct']==1 && $eachProduct['isIngredientCustomise']==1){
+                                $orderDetails->variable_selling_price=$customizeIngradientPrice+$mirchiPrice;
+                            }else{
+                                $orderDetails->variable_selling_price=$product->variable_selling_price;
+                            }
+
                             if(array_key_exists('customiseProductTypeOfMirchi',$eachProduct)){
                                 $orderDetails->mirchiType=$eachProduct['customiseProductTypeOfMirchi'];
                             }

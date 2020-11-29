@@ -53,8 +53,8 @@
                 @foreach($order->orderDetails as $key=>$orderDetail)
                     <tr>
 
-                        <td>{{$orderDetail->productVariable->product->name}}</td>
-                        <td>{{$orderDetail->productVariable->product_variable_options_name}}</td>
+                        <td>{{$orderDetail->productVariable->product->name}} ({{$orderDetail->mirchiType!='none'?$orderDetail->mirchiType:''}})</td>
+                        <td>{{$orderDetail->productVariable->product_variable_options_name}} </td>
                         <td>{{$orderDetail->quantity}}</td>
                         <td>Rs. {{$orderDetail->variable_selling_price}} </td>
                         <td>Rs. {{$orderDetail->quantity*$orderDetail->variable_selling_price}} </td>
@@ -63,7 +63,7 @@
                                 <thead>
                                 <tr>
                                     <th class="p-0">Masala Ingradient Name </th>
-                                    <th class="p-0">Masala Ingradient Qty</th>
+                                    <th class="p-0">Masala Ingradient Qty (In grams)</th>
                                 </tr>
                                 </thead>
                                 <tbody>
