@@ -38,6 +38,7 @@ class ProductSubCategoryController extends Controller
         $productSubCategory->product_subcategory_name=$request->input('product_subcategory_name','');
         $productSubCategory->product_category_id=$request->input('product_category_id','');
         $productSubCategory->is_active=$request->input('is_active','');
+        $productSubCategory->searchString=$request->product_subcategory_name.', '.$request->hindiText.', '.$request->marathiText;
         $productSubCategory->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$request->product_subcategory_name)->first();
@@ -45,14 +46,14 @@ class ProductSubCategoryController extends Controller
             if(strlen($languageData->originalText)<=0){
                 $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
             }
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_subcategory_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
         }else{
             $languageData = new LanguageTranslation;
             $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_subcategory_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
@@ -79,6 +80,7 @@ class ProductSubCategoryController extends Controller
         if ($request->hasfile('product_subcategory_image_url')){
             $productSubCategory->product_subcategory_image_url=$this->saveImage($request->file('product_subcategory_image_url'));
         }
+        $productSubCategory->searchString=$request->product_subcategory_name.', '.$request->hindiText.', '.$request->marathiText;
 
         $productSubCategory->product_subcategory_name=$request->input('product_subcategory_name','');
         $productSubCategory->product_category_id=$request->input('product_category_id','');
@@ -90,14 +92,14 @@ class ProductSubCategoryController extends Controller
             if(strlen($languageData->originalText)<=0){
                 $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
             }
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_subcategory_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
         }else{
             $languageData = new LanguageTranslation;
             $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_subcategory_name));
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_subcategory_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();

@@ -48,6 +48,7 @@ class ProductsController extends Controller
         $product->description=$request->description;
         $product->product_subcategory_id=$request->product_subcategory_id;
         $product->gst_percentage=$request->gst_percentage;
+        $product->searchString=$request->name.', '.$request->hindiText.', '.$request->marathiText;
         $product->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$request->name)->first();
@@ -92,6 +93,7 @@ class ProductsController extends Controller
         $product->description=$request->description;
         $product->product_subcategory_id=$request->product_subcategory_id;
         $product->gst_percentage=$request->gst_percentage;
+        $product->searchString=$request->name.', '.$request->hindiText.', '.$request->marathiText;
         $product->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$product->name)->first();
@@ -184,6 +186,7 @@ class ProductsController extends Controller
         $productVariable->variable_selling_price=$request->variable_selling_price;
         $productVariable->product_variable_options_name=$productVariableOption->variable_name;
         $productVariable->product_variable_option_size=$productVariableOption->variable_quantity;
+        $productVariable->quantity=$request->quantity;
         $productVariable->save();
         $product=Product::find($request->product_id);
         return redirect()->route('admin.products.show',compact('product'));

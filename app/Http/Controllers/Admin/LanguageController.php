@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use File;
@@ -25,7 +26,37 @@ class LanguageController extends Controller
 
 //        $registrationIds = array( 'cyMSGTKBzwU:APA91...xMKgjgN32WfoJY6mI' ); //Replace this with your device token
 
+    $category_data= ProductCategory::all();
+    foreach ($category_data as $key=>$eachCategory){
 
+        $languageData = LanguageTranslation::where('originalText','=',strtolower(str_replace(' ', '_', $eachCategory['product_category_name'])))->first();
+        if($languageData){
+            $eachCategory['searchString']= $languageData->englishText.', '.$languageData->marathiText.', '.$languageData->hindiText;
+            $eachCategory->save();
+        }
+
+    }
+    $category_data= ProductSubCategory::all();
+    foreach ($category_data as $key=>$eachCategory){
+
+        $languageData = LanguageTranslation::where('originalText','=',strtolower(str_replace(' ', '_', $eachCategory['product_subcategory_name'])))->first();
+        if($languageData){
+            $eachCategory['searchString']= $languageData->englishText.', '.$languageData->marathiText.', '.$languageData->hindiText;
+            $eachCategory->save();
+        }
+
+    }
+
+    $category_data= Product::all();
+    foreach ($category_data as $key=>$eachCategory){
+
+        $languageData = LanguageTranslation::where('originalText','=',strtolower(str_replace(' ', '_', $eachCategory['name'])))->first();
+        if($languageData){
+            $eachCategory['searchString']= $languageData->englishText.', '.$languageData->marathiText.', '.$languageData->hindiText;
+            $eachCategory->save();
+        }
+
+    }
 // Modify custom payload here
 // $languageData = LanguageTranslation::where('id','>=',186)->whereNull('englishText')->get();
 
@@ -36,16 +67,16 @@ class LanguageController extends Controller
         //         print_r($Category->product_category_name);
         //         $eachLanguage->englishText=$Category->product_category_name;
         //         $eachLanguage->save();
-                
+
         //     }else{
         //         $subcategory = ProductSubCategory::where('product_subcategory_name','like', '%' . $tempText . '%')->first();
         //     if($subcategory){
         //         print_r($subcategory->product_subcategory_name);
         //         $eachLanguage->englishText=$subcategory->product_subcategory_name;
         //         $eachLanguage->save();
-        //     }   
         //     }
-            
+        //     }
+
 
         // }
 

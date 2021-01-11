@@ -12,7 +12,7 @@ class ProductCategoryController extends Controller{
     {
         try {
 
-            $productCategory= ProductCategory::with('productSubCategory')->get();
+            $productCategory= ProductCategory::with('productSubCategory')->orderBy('displayOrder')->get();
             $banners= Banners::where('status',true)->get();
             if(count($productCategory)>0){
                 return response()->json(['success' => true,

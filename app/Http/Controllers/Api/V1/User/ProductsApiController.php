@@ -22,7 +22,7 @@ class ProductsApiController extends Controller
                     'msg'=>$validator->errors()], 200);
             }
             else{
-                $products = Product::where('product_subcategory_id','=',$request->subcategory_id)->with(['productVariable','productImages'])->get();
+                $products = Product::where('product_subcategory_id','=',$request->subcategory_id)->with(['productVariable','productImages'])->orderBy('displayOrder')->get();
                 return response()->json(['success' => true,
                     'data'=>$products], 200);
             }

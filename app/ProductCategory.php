@@ -11,7 +11,7 @@ class ProductCategory extends Model
 
     public function productSubCategory()
     {
-        return $this->hasMany(ProductSubCategory::class);
+        return $this->hasMany(ProductSubCategory::class)->orderBy('displayOrder');
     }
 }
 

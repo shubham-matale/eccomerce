@@ -27,7 +27,7 @@ class Product extends Model
 
     public function productVariable()
     {
-        return $this->hasMany(ProductVariable::class);
+        return $this->hasMany(ProductVariable::class)->orderBy('product_variable_option_size');
     }
 
     public function productImages()

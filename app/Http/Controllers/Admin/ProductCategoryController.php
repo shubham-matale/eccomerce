@@ -34,6 +34,7 @@ class ProductCategoryController extends Controller
         }
         $productCategory->product_category_name=$request->input('product_category_name','');
         $productCategory->is_active=$request->input('is_active','');
+        $productCategory->searchString=$request->product_category_name.', '.$request->hindiText.', '.$request->marathiText;
         $productCategory->save();
 
         $languageData = LanguageTranslation::where('englishText','=',$request->product_category_name)->first();
@@ -41,14 +42,14 @@ class ProductCategoryController extends Controller
             if(strlen($languageData->originalText)<=0){
                 $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
             }
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_category_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
         }else{
             $languageData = new LanguageTranslation;
             $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_category_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
@@ -76,21 +77,21 @@ class ProductCategoryController extends Controller
 
         $productCategory->product_category_name=$request->input('product_category_name','');
         $productCategory->is_active=$request->input('is_active','');
-
+        $productCategory->searchString=$request->product_category_name.', '.$request->hindiText.', '.$request->marathiText;
         $productCategory->save();
         $languageData = LanguageTranslation::where('englishText','=',$request->product_category_name)->first();
         if($languageData){
             if(strlen($languageData->originalText)<=0){
                 $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
             }
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_category_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
         }else{
             $languageData = new LanguageTranslation;
             $languageData->originalText=strtolower(str_replace(' ', '_', $request->product_category_name));
-            $languageData->englishText=$request->name;
+            $languageData->englishText=$request->product_category_name;
             $languageData->hindiText=$request->hindiText;
             $languageData->marathiText=$request->marathiText;
             $languageData->save();
