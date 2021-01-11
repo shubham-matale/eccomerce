@@ -383,13 +383,12 @@ class OrderController extends Controller{
                                     switch ($eachProduct['customiseProductTypeOfMirchi']) {
                                         case "Medium Mirchi":
                                             $mirchiPrice = $product['medium_mirchi_price'];
-
                                             break;
                                         case "Spicy Mirchi":
-                                            $mirchiPrice = $product['medium_mirchi_price'];
+                                            $mirchiPrice = $product['spicy_mirchi_price'];
                                             break;
                                         case "Mirchi":
-                                            $mirchiPrice = $product['medium_mirchi_price'];
+                                            $mirchiPrice = $product['less_mirchi_price'];
                                             break;
                                     }
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use File;
 use App\LanguageTranslation;
 use App\Http\Requests\StoreLanguageRequest;
+use App\ProductSubCategory;
+use App\ProductCategory;
 class LanguageController extends Controller
 {
     public function downloadJSONFile(){
@@ -25,6 +27,27 @@ class LanguageController extends Controller
 
 
 // Modify custom payload here
+// $languageData = LanguageTranslation::where('id','>=',186)->whereNull('englishText')->get();
+
+        // foreach($languageData as $key=>$eachLanguage){
+        //     $tempText=str_replace('_', ' ', $eachLanguage['originalText']);
+        //     $Category = ProductCategory::where('product_category_name','like', '%' . $tempText . '%')->first();
+        //     if($Category){
+        //         print_r($Category->product_category_name);
+        //         $eachLanguage->englishText=$Category->product_category_name;
+        //         $eachLanguage->save();
+                
+        //     }else{
+        //         $subcategory = ProductSubCategory::where('product_subcategory_name','like', '%' . $tempText . '%')->first();
+        //     if($subcategory){
+        //         print_r($subcategory->product_subcategory_name);
+        //         $eachLanguage->englishText=$subcategory->product_subcategory_name;
+        //         $eachLanguage->save();
+        //     }   
+        //     }
+            
+
+        // }
 
 
         $languageData = LanguageTranslation::all();
@@ -35,7 +58,7 @@ class LanguageController extends Controller
         $hindi_2=[];
         $marathi_2=[];
         foreach($languageData as $key=>$eachLanguage){
-            $english_2[$eachLanguage['originalText']]=$eachLanguage['englishText'];
+            $english_2[$eachLanguage['originalText']]=ucwords($eachLanguage['englishText']);
             $hindi_2[$eachLanguage['originalText']]=$eachLanguage['hindiText'];
             $marathi_2[$eachLanguage['originalText']]=$eachLanguage['marathiText'];
             $english[$eachLanguage['englishText']]=$eachLanguage['englishText'];
@@ -43,7 +66,7 @@ class LanguageController extends Controller
             $marathi[$eachLanguage['englishText']]=$eachLanguage['marathiText'];
         }
 
-        dd($english_2);
+        // dd($english_2);
 
         $data = json_encode($marathi,JSON_UNESCAPED_UNICODE);
         $file = 'marathi_file.json';
