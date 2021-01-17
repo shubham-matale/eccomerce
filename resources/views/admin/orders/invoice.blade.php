@@ -2,41 +2,24 @@
 <html lang="en">
 <head>
     <title>{{ $order->Invoice_No }}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/select/1.3.0/css/select.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
-    <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
-
-
 </head>
 
-<body>
-    <div class="invoice p-3 mb-3">
-        <!-- title row -->
-        <div class="row">
-            <div class="col-12">
-                <h4>
 
+<body>
+    <div class="invoice p-3 mb-3" style="background: #fff;border: 1px solid rgba(0,0,0,.125);position: relative;padding: 1rem !important;">
+        <!-- title row -->
+        <div class="row" style="display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-right: -7.5px;margin-left: -7.5px;">
+            <div class="col-12" style="float:left">
+                <h4>
                     <small class="float-right">Date: {{$order->created_at}}</small>
                 </h4>
             </div>
             <!-- /.col -->
         </div>
         <!-- info row -->
-        <div class="row invoice-info">
+        <div class="row invoice-info" style="display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-right: -7.5px;margin-left: -7.5px;">
             <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
+            <div class="col-sm-4 invoice-col" style="flex: 0 0 33.333333%;max-width: 33.333333%;">
                 Customer Details
                 <address>
                     <strong>{{$order->customer->name}}</strong><br>
@@ -47,7 +30,7 @@
                 </address>
             </div>
             <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
+            <div class="col-sm-4 invoice-col" style="flex: 0 0 33.333333%;max-width: 33.333333%;">
                 <b>Invoice No : {{$order->Invoice_no}}</b><br>
                 <br>
                 <b>Payment Status : </b> <span class="{{$order->payment_status!='paid'?'badge badge-danger':'badge badge-success'}}">{{$order->payment_status}}</span><br>
@@ -57,41 +40,41 @@
         <!-- /.row -->
 
         <!-- Table row -->
-        <div class="row">
+        <div class="row" style="padding-top: 10px;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-right: -7.5px;margin-left: -7.5px;">
             <div class="col-12 table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Variable Type</th>
-                        <th>Qty</th>
-                        <th>Prodcut Selling Price</th>
-                        <th>Subtotal</th>
+                <table class="table table-striped" style="border: 1px solid black;border-collapse: collapse;">
+                    <thead style="border: 1px solid black">
+                    <tr style="border: 1px solid black">
+                        <th style="border: 1px solid black">Product Name</th>
+                        <th style="border: 1px solid black">Variable Type</th>
+                        <th style="border: 1px solid black">Qty</th>
+                        <th style="border: 1px solid black">Prodcut Selling Price</th>
+                        <th style="border: 1px solid black">Subtotal</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody  style="border: 1px solid black">
                     @foreach($order->orderDetails as $key=>$orderDetail)
-                        <tr>
+                        <tr  style="border: 1px solid black">
 
-                            <td>{{$orderDetail->productVariable->product->name}}</td>
-                            <td>{{$orderDetail->productVariable->product_variable_options_name}}</td>
-                            <td>{{$orderDetail->quantity}}</td>
-                            <td>Rs. {{$orderDetail->variable_selling_price}} </td>
-                            <td>Rs. {{$orderDetail->quantity*$orderDetail->variable_selling_price}} </td>
+                            <td  style="border: 1px solid black">{{$orderDetail->productVariable->product->name}}</td>
+                            <td  style="border: 1px solid black">{{$orderDetail->productVariable->product_variable_options_name}}</td>
+                            <td  style="border: 1px solid black">{{$orderDetail->quantity}}</td>
+                            <td  style="border: 1px solid black">Rs. {{$orderDetail->variable_selling_price}} </td>
+                            <td  style="border: 1px solid black">Rs. {{$orderDetail->quantity*$orderDetail->variable_selling_price}} </td>
                             @if($orderDetail->mirchiType!="none")
-                                <table class="table table-striped ml-5">
-                                    <thead>
-                                    <tr>
-                                        <th>Ingradient Name </th>
-                                        <th>Ingradient Qty</th>
+                                <table class="table table-striped ml-5" style="border: 1px solid black;border-collapse: collapse;">
+                                    <thead style="border: 1px solid black">
+                                    <tr style="border: 1px solid black">
+                                        <th style="border: 1px solid black">Ingradient Name </th>
+                                        <th style="border: 1px solid black">Ingradient Qty</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
                                     @foreach($orderDetail->customProductDetails as $key=>$customDetails)
-                                        <tr>
-                                            <td>{{$customDetails->ingradient->name }}</td>
-                                            <td>{{$customDetails->required_qty}}</td>
+                                        <tr style="border: 1px solid black">
+                                            <td style="border: 1px solid black">{{$customDetails->ingradient->name }}</td>
+                                            <td style="border: 1px solid black">{{$customDetails->required_qty}}</td>
 
                                         </tr>
                                     @endforeach
@@ -109,47 +92,46 @@
         </div>
         <!-- /.row -->
 
-        <div class="row">
+        <div class="row" style="padding-top: 10px;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-right: -7.5px;margin-left: -7.5px;">
             <!-- accepted payments column -->
-            <div class="col-6">
+            <div class="col-6" style="flex: 0 0 15.333333%;max-width: 33.333333%;">
 
 
             </div>
             <!-- /.col -->
-            <div class="col-6">
-                {{--            <p class="lead"></p>--}}
-
+            <div class="col-6" style="flex: 0 0 33.333333%;max-width: 33.333333%;">
                 <div class="table-responsive">
-                    <table class="table">
-                        <tbody>
+                    <table class="table" style="border: 1px solid black;border-collapse: collapse;">
+                        <tbody style="border: 1px solid black">
                         @if($order->discount>0)
-                            <tr>
-                                <th>Discount:({{$order->couponDetails->code}})</th>
-                                <td>Rs. {{$order->discount}}</td>
+                            <tr style="border: 1px solid black">
+                                <th style="border: 1px solid black">Discount:({{$order->couponDetails->code}})</th>
+                                <td style="border: 1px solid black">Rs. {{$order->discount}}</td>
                             </tr>
                         @endif
-                        <tr>
-                            <th style="width:50%">Subtotal:</th>
-                            <td>Rs. {{$order->sub_total}}</td>
+                        <tr style="border: 1px solid black">
+                            <th style="width:50% ;border: 1px solid black">Subtotal:</th>
+                            <td style="border: 1px solid black">Rs. {{$order->sub_total}}</td>
                         </tr>
-                        <tr>
-                            <th>Tax (5%)</th>
-                            <td>Rs. {{$order->tax}}</td>
+                        <tr style="border: 1px solid black">
+                            <th style="border: 1px solid black">Tax (5%)</th>
+                            <td style="border: 1px solid black">Rs. {{$order->tax}}</td>
                         </tr>
-                        <tr>
-                            <th>Shipping Cost:</th>
-                            <td>Rs. {{$order->delivery_charge}}</td>
+                        <tr style="border: 1px solid black">
+                            <th style="border: 1px solid black">Shipping Cost:</th>
+                            <td style="border: 1px solid black">Rs. {{$order->delivery_charge}}</td>
                         </tr>
-
-
-                        <tr>
-                            <th>Total:</th>
-                            <td>Rs. {{$order->total_amount}}</td>
+                        <tr style="border: 1px solid black">
+                            <th style="border: 1px solid black">Total:</th>
+                            <td style="border: 1px solid black">Rs. {{$order->total_amount}}</td>
                         </tr>
                         </tbody></table>
                 </div>
             </div>
             <!-- /.col -->
+        </div>
+        <div style="padding-top: 10px;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-right: -7.5px;margin-left: -7.5px; text-align: center">
+            <h4>Thanks For Ordering From Shree Kakaji Masale.</h4>
         </div>
         <!-- /.row -->
 

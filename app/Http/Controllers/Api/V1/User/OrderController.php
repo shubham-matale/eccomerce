@@ -520,6 +520,21 @@ class OrderController extends Controller{
                                 $product->save();
                             }
                         }
+
+
+                        $order = Order::where('id',$request->order_id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->first();
+
+                        $html = view('admin.orders.invoice', compact('order'))->render();
+                        if($order->customer->email!=$order->customer->mobile_no.'@gmail.com'){
+                            Mail::send(array(), array(), function ($message) use ($html,$order) {
+                                $message->to($order->customer->email)
+                                    ->bcc('shreekakajimasale1@gmail.com')
+                                    ->subject('invoice')
+                                    ->setBody($html, 'text/html');
+                            });
+                            return response()->json(['success' => false,'data'=>"You will receive mail in short time"], 200);;
+                        }
+
                         $msg = array
                         (
                             "body"=>"New Order Received On Shree Kakaji Masale App",
@@ -614,21 +629,20 @@ class OrderController extends Controller{
                     'msg'=>$validator->errors()], 200);
             }else{
                 $order = Order::where('id',$request->order_id)->with(['couponDetails','customer','orderDetails','orderStatus','address','deliveryBoy','orderDetails.customProductDetails','orderDetails.customProductDetails.ingradient'])->first();
-                $data = compact($order);
+
                 $html = view('admin.orders.invoice', compact('order'))->render();
-//                dd($html);
-//                $pdf = App::make('dompdf.wrapper');
-//                PDF::setOptions(['dpi' => 150, 'defaultFont' => 'DejaVu Sans']);
-//                $invPDF = $pdf->loadHTML($html);
-//                return $pdf->download('invoice.pdf');
-//                $pdf = PDF::loadHTML('admin.orders.invoice',compact('order'));
-//                Mail::send(array(), array(), function ($message) use ($html) {
-//                    $message->to('mataleshubham@gmail.com')
-//                    ->subject('invoice')
-//                    ->setBody($html, 'text/html');
-//});
-                Mail::to('mataleshubham@gmail.com')->queue(new SendMail($order));
-                return response()->json(['success' => false,'data'=>"fcsd"], 200);;
+                if($order->customer->email!=$order->customer->mobile_no.'@gmail.com'){
+                    Mail::send(array(), array(), function ($message) use ($html,$order) {
+                        $message->to($order->customer->email)
+                            ->bcc('shreekakajimasale1@gmail.com')
+                            ->subject('invoice')
+                            ->setBody($html, 'text/html');
+                    });
+                    return response()->json(['success' => false,'data'=>"You will receive mail in short time"], 200);;
+                }
+                return response()->json(['success' => false,'data'=>"Can't send mail due to invalid email"], 200);;
+//                Mail::to('mataleshubham@gmail.com')->queue(new SendMail($order));
+
 //                return $pdf->download('invoice.pdf');
             }
 
